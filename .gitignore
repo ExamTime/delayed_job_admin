@@ -1,7 +1,4 @@
-*.rbc
-*.sassc
-.sass-cache
-capybara-*.html
+bin/*
 .rspec
 /.bundle
 /vendor/bundle
@@ -11,6 +8,5 @@ capybara-*.html
 /public/system/*
 /coverage/
 /spec/tmp/*
-**.orig
-rerun.txt
-pickle-email-*.html
+/spec/dummy/tmp/*
+/spec/dummy/log/*
