@@ -1,0 +1,8 @@
+%h1
+  Create a delayed job
+= form_tag(controller: 'custom_jobs', action: 'create', method: 'post') do
+  = label_tag 'name'
+  = text_field_tag 'name'
+  = label_tag 'message'
+  = text_field_tag 'message'
+  = submit_tag "Create this delayed job"

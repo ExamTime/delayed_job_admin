@@ -1,0 +1,5 @@
+en:
+  delayed_job_admin:
+    error:
+      message:
+        action_not_supported: "Permission for '%{action}' action is not supported"
