@@ -1,7 +1,7 @@
 delayed_job_admin
 =================
 
-Adding some simple admin features to delayed_job
+Adding some simple admin features to delayed_job.
 
 This project is a mountable rails engine to provide some useful admin tools to monitor your delayed jobs queue.
 
