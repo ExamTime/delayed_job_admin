@@ -5,7 +5,7 @@ describe Delayed::Job do
     @job = Delayed::Job.new
   end
 
-  [:apply_handlers, :archive].each do |method|
+  [:apply_handlers].each do |method|
     it "should respond_to method :#{method}" do
       @job.should respond_to method
     end
