@@ -1,5 +1,40 @@
 en:
   delayed_job_admin:
+    delayed_jobs:
+      no_queued_jobs: No queued jobs
+      titles:
+        index: Queued jobs
+      table:
+        id: ID
+        priority: Priority
+        attempts: Attempts
+        handler: Handler
+        last_error: Last error
+        run_at: Run at
+        locked_at: Locked at
+        queue: Queue
+        created_at: Created at
+        updated_at: Updated at
+    archived_delayed_jobs:
+      no_queued_jobs: No archived jobs
+      titles:
+        index: Archived jobs
+      table:
+        id: ID
+        priority: Priority
+        attempts: Attempts
+        handler: Handler
+        last_error: Last error
+        run_at: Run at
+        locked_at: Locked at
+        queue: Queue
+        created_at: Created at
+        updated_at: Updated at
+        archived_at: Archived at
+        archive_note: Archive note
+    destroy_job:
+      success: "The delayed job has been successfully destroyed."
+      failure: "There has been an error when destroying this delayed job."
     error:
       message:
         action_not_supported: "Permission for '%{action}' action is not supported"

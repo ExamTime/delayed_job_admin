@@ -17,7 +17,7 @@ module DelayedJobAdmin
       end
 
       def copy_migrations
-        migration_template "create_delayed_job_archives.rb", "db/migrate/create_delayed_job_archives.rb"
+        migration_template "create_delayed_job_admin_archived_jobs.rb", "db/migrate/create_delayed_job_admin_archived_jobs.rb"
         template "delayed_job_admin.rb", "config/initializers/delayed_job_admin.rb"
         template "delayed_job_admin.en.yml", "config/locales/delayed_job_admin.en.yml"
       end

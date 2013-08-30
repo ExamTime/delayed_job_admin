@@ -5,6 +5,23 @@ describe DelayedJobAdmin do
     DelayedJobAdmin.should be_a Module
   end
 
+  describe "default config" do
+    describe "destroy_handlers" do
+      it "should be defined" do
+        DelayedJobAdmin.destroy_handlers.should_not be_nil
+      end
+
+      it "should be an array with a single instance" do
+        DelayedJobAdmin.destroy_handlers.should be_a Array
+        DelayedJobAdmin.destroy_handlers.size.should == 1
+      end
+
+      it "should contain a default class of 'DelayedJobAdmin::ArchiveOnDestroyHandler'" do
+        DelayedJobAdmin.destroy_handlers.first.should == 'DelayedJobAdmin::ArchiveOnDestroyHandler'
+      end
+    end
+  end
+
   describe "dependency" do
 
     describe "DelayedJob" do

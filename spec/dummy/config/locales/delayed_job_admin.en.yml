@@ -1,0 +1,8 @@
+en:
+  delayed_job_admin:
+    destroy_job:
+      success: "The delayed job has been successfully destroyed."
+      failure: "There has been an error when destroying this delayed job."
+    error:
+      message:
+        action_not_supported: "Permission for '%{action}' action is not supported"

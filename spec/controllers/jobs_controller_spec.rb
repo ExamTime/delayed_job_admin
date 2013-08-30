@@ -13,11 +13,14 @@ describe DelayedJobAdmin::JobsController do
     DelayedJobAdmin::JobsController.ancestors.should include ActionController::Base
   end
 
+  it "should be a subclass of DelayedJobAdmin::ApplicationController" do
+    DelayedJobAdmin::JobsController.ancestors.should include DelayedJobAdmin::ApplicationController
+  end
+
   describe "action" do
     before :each do
       @queued_model = DummyModel.create(name: 'Model in queue')
-      @queued_model.delay.method_to_queue('in queue')
-      @job = Delayed::Job.all.first
+      @job = @queued_model.delay.method_to_queue('in queue')
     end
 
     describe "GET #index" do
@@ -38,12 +41,44 @@ describe DelayedJobAdmin::JobsController do
     end
 
     describe "DELETE #destroy" do
-      it "should destroy the Delayed::Job"
-      it "should audit the action"
-      #it "should write a warning to the logger"
-      #it "should send an email to the configured address"
-      it "should set a flash message on delete"
-      it "should render the index template"
+      before :each do
+        DelayedJobAdmin.destroy_handlers = [ DummyHandler ]
+      end
+
+      it "should invoke the configured destroy handler" do
+        mock_handler = double('mock_handler')
+        DummyHandler.should_receive(:new).with(@job).once.and_return(mock_handler)
+        mock_handler.should_receive(:handle).once
+        delete :destroy, id: @job, use_route: :delayed_job_admin
+      end
+
+      context 'handlers process successfully' do
+        it "should set a :notice flash message on delete" do
+          delete :destroy, id: @job, use_route: :delayed_job_admin
+          flash[:notice].should == I18n.t('delayed_job_admin.destroy_job.success')
+        end
+
+        it "should redirect to the DelayedJobAdmin::JobsController#index action" do
+          delete :destroy, id: @job, use_route: :delayed_job_admin
+          response.should redirect_to jobs_path
+        end
+      end
+
+      context 'handlers throw an exception' do
+        before :each do
+          DummyHandler.any_instance.stub(:handle) { raise StandardError }
+        end
+
+        it "should set an :error flash message" do
+          delete :destroy, id: @job, use_route: :delayed_job_admin
+          flash[:error].should == I18n.t('delayed_job_admin.destroy_job.failure')
+        end
+
+        it "should redirect to the DelayedJobAdmin::JobsController#index action" do
+          delete :destroy, id: @job, use_route: :delayed_job_admin
+          response.should redirect_to jobs_path
+        end
+      end
     end
 
     describe "GET #status" do

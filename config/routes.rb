@@ -1,5 +1,5 @@
 DelayedJobAdmin::Engine.routes.draw do
-  resources :jobs, only: [ :index ] do
+  resources :jobs, only: [ :index, :destroy ] do
     member do
       get :status
     end

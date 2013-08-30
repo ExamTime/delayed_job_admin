@@ -1,0 +1,35 @@
+%h1= t('delayed_job_admin.archived_delayed_jobs.titles.index')
+
+- if @jobs.empty?
+  = t('delayed_job_admin.archived_delayed_jobs.no_queued_jobs')
+- else
+  %table.jobs
+    %thead
+      %tr
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.id')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.priority')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.attempts')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.handler')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.last_error')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.run_at')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.locked_at')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.queue')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.created_at')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.updated_at')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.archived_at')
+        %td= t('delayed_job_admin.archived_delayed_jobs.table.archive_note')
+    %tbody
+      - @jobs.each do |job|
+        %tr
+          %td= job.id
+          %td= job.priority
+          %td= job.attempts
+          %td= job.handler
+          %td= job.last_error
+          %td= job.run_at
+          %td= job.locked_at
+          %td= job.queue
+          %td= job.created_at
+          %td= job.updated_at
+          %td= job.archived_at
+          %td= job.archived_note

@@ -3,11 +3,8 @@ require "delayed_job_active_record"
 require "haml"
 
 module DelayedJobAdmin
-  mattr_accessor :authorization_strategy
-  @@authorization_strategy = nil
-
-  mattr_accessor :supported_actions
-  @@supported_actions = [:view, :edit, :delete, :extend]
+  mattr_accessor :destroy_handlers
+  @@destroy_handlers = nil
 
   def self.setup
     yield self

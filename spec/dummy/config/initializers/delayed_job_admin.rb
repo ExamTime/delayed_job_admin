@@ -6,8 +6,8 @@ DelayedJobAdmin.setup do |config|
   #
   #     @handler = DelayedJobAdmin::ArchiveOnDeleteHandler.new(@job)
   #
-  # The resulting @handler must have a #handle method, that should encapsulate
-  # the logic to be executed when destroy is called.
+  # The resulting @handler must have a #handle_delete method, that should 
+  # encapsulate the logic on deletion.
   # The default behaviour is to archive the Delayed::Job in the delayed_job_admin_jobs_archive table.
-  config.destroy_handlers = [ DelayedJobAdmin::ArchiveOnDestroyHandler ]
+  config.destroy_handlers = [ 'DelayedJobAdmin::ArchiveOnDestroyHandler' ]
 end

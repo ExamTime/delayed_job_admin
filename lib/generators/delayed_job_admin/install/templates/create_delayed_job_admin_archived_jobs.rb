@@ -1,6 +1,6 @@
-class CreateDelayedJobArchives < ActiveRecord::Migration
+class CreateDelayedJobAdminArchivedJobs < ActiveRecord::Migration
   def self.up
-    create_table :delayed_job_archives, :force => true do |table|
+    create_table :delayed_job_admin_archived_jobs, :force => true do |table|
       table.integer  :priority, :default => 0, :null => false # Allows some jobs to jump to the front of the queue
       table.integer  :attempts, :default => 0, :null => false # Provides for retries, but still fail eventually.
       table.text     :handler, :null => false                 # YAML-encoded string of the object that will do work
@@ -10,13 +10,16 @@ class CreateDelayedJobArchives < ActiveRecord::Migration
       table.datetime :failed_at                               # Set when all retries have failed (actually, by default, the record is deleted instead)
       table.string   :locked_by                               # Who is working on this object (if locked)
       table.string   :queue                                   # The name of the queue this job is in
-      table.timestamps
+      table.datetime :created_at                              # The created_at date of the original underlying job
+      table.datetime :updated_at                              # The updated_at date of the original underlying job
+      table.datetime :archived_at
+      table.string   :archive_note
     end
 
-    add_index :delayed_job_archives, [:priority, :run_at], :name => 'delayed_jobs_priority'
+    add_index :delayed_job_admin_archived_jobs, :archived_at
   end
 
   def self.down
-    drop_table :delayed_job_archives
+    drop_table :delayed_job_admin_archived_jobs
   end
 end
