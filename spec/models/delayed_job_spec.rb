@@ -18,7 +18,8 @@ describe Delayed::Job do
       end
 
       it 'should create a destroy handler for each class configured' do
-        DummyHandler.should_receive(:new).with(@job).once
+        handler = DummyHandler.new(@job)
+        DummyHandler.should_receive(:new).with(@job).once.and_return(handler)
         @job.apply_handlers
       end
 
