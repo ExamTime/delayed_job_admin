@@ -41,8 +41,13 @@ describe DelayedJobAdmin::JobsController do
     end
 
     describe "DELETE #destroy" do
-      before :each do
+      before :all do
+        @cached_handlers = DelayedJobAdmin.destroy_handlers
         DelayedJobAdmin.destroy_handlers = [ DummyHandler ]
+      end
+
+      after :all do
+        DelayedJobAdmin.destroy_handlers = @cached_handlers
       end
 
       it "should invoke the configured destroy handler" do
