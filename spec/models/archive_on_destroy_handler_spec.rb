@@ -6,17 +6,29 @@ describe DelayedJobAdmin::ArchiveOnDestroyHandler do
     @handler = DelayedJobAdmin::ArchiveOnDestroyHandler.new(job)
   end
 
-  [:handle, :job, :job=].each do |method|
+  [:handle, :job, :job=, :audit_log, :audit_log=].each do |method|
     it "should respond_to the method :#{method}" do
       @handler.should respond_to method
     end
   end
 
   describe 'instantiation' do
-    it 'should assign a single parameter to the instance variable @job' do
+    it 'should assign first parameter to the instance variable @job' do
       test = 'This is a test'
-      new = DelayedJobAdmin::ArchiveOnDestroyHandler.new(test)
-      new.job.should == test
+      DelayedJobAdmin::ArchiveOnDestroyHandler.new(test).job.should == test
+    end
+
+    it 'should fail if first parameter is not supplied for @job' do
+      lambda{ DelayedJobAdmin::ArchiveOnDestroyHandler.new }.should raise_error StandardError
+    end
+
+    it 'should assign the second parameter to @audit_log if supplied' do
+      audit_log = 'audit'
+      DelayedJobAdmin::ArchiveOnDestroyHandler.new('job', audit_log).audit_log.should == audit_log
+    end
+
+    it 'should default the @audit_log to <blank> if not supplied' do
+      DelayedJobAdmin::ArchiveOnDestroyHandler.new('job').audit_log.should == '<blank>'
     end
   end
 
@@ -27,7 +39,7 @@ describe DelayedJobAdmin::ArchiveOnDestroyHandler do
       end
 
       it "should move the job to the archive table" do
-        expect{ @handler.handle }.to change(DelayedJobAdmin::ArchivedJob,:count).by(-1)
+        expect{ @handler.handle }.to change(DelayedJobAdmin::ArchivedJob,:count).by(1)
       end
     end
   end
