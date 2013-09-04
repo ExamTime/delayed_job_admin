@@ -10,3 +10,4 @@ bin/*
 /spec/tmp/*
 /spec/dummy/tmp/*
 /spec/dummy/log/*
+/spec/dummy/db/*.sqlite3
