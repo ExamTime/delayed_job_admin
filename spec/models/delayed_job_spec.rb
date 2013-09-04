@@ -14,7 +14,12 @@ describe Delayed::Job do
   describe 'instance method' do
     describe '#apply_handlers' do
       before :all do
+        @cached_handlers = DelayedJobAdmin::destroy_handlers
         DelayedJobAdmin::destroy_handlers = [ DummyHandler ]
+      end
+
+      after :all do
+        DelayedJobAdmin::destroy_handlers = @cached_handlers
       end
 
       it 'should create a destroy handler for each class configured' do
