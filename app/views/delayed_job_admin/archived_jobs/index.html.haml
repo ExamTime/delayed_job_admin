@@ -1,7 +1,7 @@
 %h1= t('delayed_job_admin.archived_delayed_jobs.titles.index')
 
 - if @jobs.empty?
-  = t('delayed_job_admin.archived_delayed_jobs.no_queued_jobs')
+  %p= t('delayed_job_admin.archived_delayed_jobs.no_queued_jobs')
 - else
   %table.jobs
     %thead
@@ -33,3 +33,5 @@
           %td= job.updated_at
           %td= job.archived_at
           %td= job.archived_note
+
+= link_to t('delayed_job_admin.links.jobs'), jobs_path, class: 'delayed_job_admin_navigation_link'
