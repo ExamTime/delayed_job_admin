@@ -48,7 +48,8 @@ ActiveRecord::Schema.define(:version => 20130829173310) do
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "dummy_models", :force => true do |t|
-    t.string "name"
+    t.string  "name"
+    t.integer "delay_in_seconds"
   end
 
 end
