@@ -24,14 +24,14 @@
           %td= job.id
           %td= job.priority
           %td= job.attempts
-          %td= job.handler
-          %td= job.last_error
+          %td= render 'shared/truncated_value', { value: job.handler, length: 50 }
+          %td= render 'shared/truncated_value', { value: job.last_error, length: 50 }
           %td= job.run_at
           %td= job.locked_at
           %td= job.queue
           %td= job.created_at
           %td= job.updated_at
           %td= job.archived_at
-          %td= job.archived_note
+          %td= job.archive_note
 
 = link_to t('delayed_job_admin.links.jobs'), jobs_path, class: 'delayed_job_admin_navigation_link'
