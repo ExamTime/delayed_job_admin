@@ -5,6 +5,7 @@ class DummyModel < ActiveRecord::Base
   def method_to_queue(input)
     Rails.logger.info "Running method call: #{input}"
     sleep(self.delay_in_seconds)
+    raise StandardError "Method raised and error" if input == 'ERROR'
     Rails.logger.info "Completing method call: #{input}"
   end
 
