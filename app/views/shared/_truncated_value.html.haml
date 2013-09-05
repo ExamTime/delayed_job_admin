@@ -1,0 +1,7 @@
+%span.hidden_value
+  = value
+%span.display_value
+  - if value
+    = value[0...length]
+    %a{ href: '#', class: 'delayed_job_admin_see_more' }
+      = '...'
