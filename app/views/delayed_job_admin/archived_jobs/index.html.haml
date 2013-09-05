@@ -6,21 +6,21 @@
   %table.jobs
     %thead
       %tr
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.id')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.priority')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.attempts')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.handler')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.last_error')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.run_at')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.locked_at')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.queue')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.created_at')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.updated_at')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.archived_at')
-        %td= t('delayed_job_admin.archived_delayed_jobs.table.archive_note')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.id')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.priority')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.attempts')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.handler')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.last_error')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.run_at')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.locked_at')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.queue')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.created_at')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.updated_at')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.archived_at')
+        %th= t('delayed_job_admin.archived_delayed_jobs.table.archive_note')
     %tbody
       - @jobs.each do |job|
-        %tr
+        %tr{ id: "job_id_#{job.id}" }
           %td= job.id
           %td= job.priority
           %td= job.attempts
