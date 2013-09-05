@@ -1,7 +1,9 @@
-%span.hidden_value
+%span.delayed_job_admin_value.hidden
   = value
-%span.display_value
+  %a{ href: '#', class: 'delayed_job_admin_toggle_info' }
+    = 'Collapse'
+%span.delayed_job_admin_display_value
   - if value
     = value[0...length]
-    %a{ href: '#', class: 'delayed_job_admin_see_more' }
+    %a{ href: '#', class: 'delayed_job_admin_toggle_info' }
       = '...'

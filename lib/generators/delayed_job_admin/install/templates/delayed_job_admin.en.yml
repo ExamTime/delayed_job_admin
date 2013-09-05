@@ -1,5 +1,8 @@
 en:
   delayed_job_admin:
+    links:
+      archived_jobs: Archives
+      jobs: Jobs
     delayed_jobs:
       no_queued_jobs: No queued jobs
       titles:
@@ -15,6 +18,11 @@ en:
         queue: Queue
         created_at: Created at
         updated_at: Updated at
+        status: Status
+        see_more: More
+        failing_job:
+          see_more: More
+          destroy: Remove
     archived_delayed_jobs:
       no_queued_jobs: No archived jobs
       titles:

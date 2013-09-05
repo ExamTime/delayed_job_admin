@@ -10,4 +10,7 @@ DelayedJobAdmin.setup do |config|
   # the logic to be executed when destroy is called.
   # The default behaviour is to archive the Delayed::Job in the delayed_job_admin_jobs_archive table.
   config.destroy_handlers = [ DelayedJobAdmin::ArchiveOnDestroyHandler ]
+
+  # Configure details for the JS polling of the delayed_jobs table for status
+  config.poll_interval_in_secs = 5
 end
