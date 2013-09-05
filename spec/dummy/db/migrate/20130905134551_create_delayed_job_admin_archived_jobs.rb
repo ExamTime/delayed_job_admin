@@ -10,9 +10,10 @@ class CreateDelayedJobAdminArchivedJobs < ActiveRecord::Migration
       table.datetime :failed_at                               # Set when all retries have failed (actually, by default, the record is deleted instead)
       table.string   :locked_by                               # Who is working on this object (if locked)
       table.string   :queue                                   # The name of the queue this job is in
+      table.datetime :created_at                              # The created_at date of the original underlying job
+      table.datetime :updated_at                              # The updated_at date of the original underlying job
       table.datetime :archived_at
       table.string   :archive_note
-      table.timestamps
     end
 
     add_index :delayed_job_admin_archived_jobs, :archived_at
