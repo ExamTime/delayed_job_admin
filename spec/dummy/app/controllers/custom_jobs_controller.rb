@@ -3,7 +3,9 @@ class CustomJobsController < ApplicationController
   end
 
   def create
-    DummyModel.create(name: params[:name]).delay.method_to_queue(params[:message])
-    redirect_to delayed_job_admin_engine.jobs_url
+    name = params.fetch(:name)
+    delay = params.fetch(:delay).to_i
+    DummyModel.create(name: name, delay_in_seconds: delay).delay.method_to_queue(params[:message])
+    redirect_to delayed_job_admin.jobs_url
   end
 end
