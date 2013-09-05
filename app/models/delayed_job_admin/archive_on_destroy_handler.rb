@@ -12,7 +12,6 @@ module DelayedJobAdmin
         DelayedJobAdmin::ArchivedJob.create!(job: self.job, archive_note: audit_log)
         job.destroy
       end
-      binding.pry
     end
   end
 end
