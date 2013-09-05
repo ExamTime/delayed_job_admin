@@ -27,7 +27,7 @@ class Delayed::Job
   end
 
   def status
-    return PENDING if self.locked_at.nil?
-    self.failed_at ? FAILING : PROCESSING
+    return FAILING if self.last_error
+    self.locked_at ? PROCESSING : PENDING
   end
 end

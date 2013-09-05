@@ -56,8 +56,9 @@ describe Delayed::Job do
     end
 
     describe '#status' do
-      it 'should return PENDING if locked_at is nil' do
+      it 'should return PENDING if locked_at is nil and last_error is nil' do
         @job.locked_at = nil
+        @job.last_error = nil
         @job.status.should == Delayed::Job::PENDING
       end
 
@@ -67,9 +68,8 @@ describe Delayed::Job do
         @job.status.should == Delayed::Job::PROCESSING
       end
 
-      it 'should return FAILING if locked_at is not nil and failed_at is not nil' do
-        @job.locked_at = DateTime.now - 20.minutes
-        @job.failed_at = DateTime.now - 10.minutes
+      it 'should return FAILING if last_error is not nil' do
+        @job.last_error = 'Failed job'
         @job.status.should == Delayed::Job::FAILING
       end
     end
