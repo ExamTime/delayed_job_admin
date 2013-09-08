@@ -1,0 +1,37 @@
+var DELAYED_JOB_ADMIN = (function(dja, $) {
+
+  var base_route = <%= delayed_job_admin.jobs_path %>;
+  var default_poll_interval_in_secs = <%= DelayedJobAdmin::default_poll_interval_in_secs %>;
+
+  dja.poll_job = function(job_id, success, failure, poll_interval) {
+
+    success = (typeof success === 'function') ? success : function() {};
+    failure = (typeof failure === 'function') ? failure : function() {};
+    poll_interval = (typeof poll_interval !== 'undefined') ? poll_interval : default_poll_interval_in_secs*1000;
+    var status_route = base_route + '/' + job_id + '/status';
+
+    var on_status_update = function(data) {
+      if(data.status==='failing') {
+        failure();
+      } else if(data.status==='none') {
+        success();
+      } else {
+        window.setTimeout(poll, poll_interval);
+      }
+    };
+
+    var poll = function() {
+      $.ajax({
+        url: status_route,
+        data: {},
+        success: on_status_update,
+        dataType: 'json'
+      });
+    };
+
+    poll();
+  };
+
+  return dja;
+
+})( DELAYED_JOB_ADMIN || {}, jQuery);
