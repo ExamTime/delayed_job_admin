@@ -1,13 +1,13 @@
 %h1
   Create a delayed job
-= form_tag(controller: 'custom_jobs', action: 'create', method: 'post') do
+= form_tag({controller: 'custom_jobs', action: 'create', method: 'post'}, {id: 'create_custom_job_form'}) do
   = label_tag 'name'
   = text_field_tag 'name'
   = label_tag 'delay'
   = text_field_tag 'delay'
   = label_tag 'message'
   = text_field_tag 'message'
-  = submit_tag "Create this delayed job"
+  = button_tag 'Create this delayed job', type: 'button', id: 'submit_custom_job'
 %p
   To create a job that will raise an error on processing please specify message text of 'ERROR'
 
