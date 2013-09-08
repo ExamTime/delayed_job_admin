@@ -17,7 +17,7 @@ describe DelayedJobAdmin do
       end
 
       it "should contain a default class of 'DelayedJobAdmin::ArchiveOnDestroyHandler'" do
-        DelayedJobAdmin.destroy_handlers.first.should == 'DelayedJobAdmin::ArchiveOnDestroyHandler'
+        DelayedJobAdmin.destroy_handlers.first.should == DelayedJobAdmin::ArchiveOnDestroyHandler
       end
     end
   end
