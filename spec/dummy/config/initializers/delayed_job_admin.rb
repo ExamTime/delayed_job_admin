@@ -12,5 +12,5 @@ DelayedJobAdmin.setup do |config|
   config.destroy_handlers = [ DelayedJobAdmin::ArchiveOnDestroyHandler ]
 
   # Configure details for the JS polling of the delayed_jobs table for status
-  # config.poll_interval_in_secs = 5
+  config.default_poll_interval_in_secs = 5
 end
