@@ -1,5 +1,8 @@
+= javascript_include_tag 'delayed_job_admin/poll_job'
 %h1
   Create a delayed job
+#status_message{ style: 'font-weight: bold; font-size: 16pt; text-align: center' }
+  No job submitted
 = form_tag({controller: 'custom_jobs', action: 'create', method: 'post'}, {id: 'create_custom_job_form'}) do
   = label_tag 'name'
   = text_field_tag 'name'
