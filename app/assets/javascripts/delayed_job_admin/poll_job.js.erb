@@ -1,7 +1,7 @@
 <% environment.context_class.instance_eval { include Rails.application.routes.url_helpers } %>
 var DELAYED_JOB_ADMIN = (function(dja, $) {
 
-  var base_route = <%= "#{delayed_job_admin_path}/jobs" %>;
+  var base_route = '<%= "#{delayed_job_admin_path}/jobs" %>';
   var default_poll_interval_in_secs = <%= DelayedJobAdmin::default_poll_interval_in_secs %>;
 
   dja.poll_job = function(job_id, success, failure, processing, poll_interval) {
@@ -9,7 +9,7 @@ var DELAYED_JOB_ADMIN = (function(dja, $) {
     success = (typeof success === 'function') ? success : function() {};
     failure = (typeof failure === 'function') ? failure : function() {};
     process = (typeof process === 'function') ? process : function() {};
-    poll_interval = (typeof poll_interval !== 'undefined') ? poll_interval : default_poll_interval_in_secs*1000;
+    poll_interval = (typeof poll_interval !== 'undefined') ? poll_interval*1000 : default_poll_interval_in_secs*1000;
     var status_route = base_route + '/' + job_id + '/status';
 
     var on_status_update = function(data) {
@@ -19,7 +19,7 @@ var DELAYED_JOB_ADMIN = (function(dja, $) {
         failure(data);
       } else {
         if(data.status==='processing') {
-          process(data);
+          processing(data);
         }
         window.setTimeout(poll, poll_interval);
       }
