@@ -9,12 +9,8 @@ module DelayedJobAdmin
       json_response = { job_id: job_id, status: 'none' }
 
       job = Delayed::Job.where(id: job_id).first
-=begin
-      if job
-        json_response[:status] = job.failed? ? 'failing' : 'pending'
-      end
-=end
-      json_response[:status] = job.status if job
+      json_response[:status] = job.status.to_s if job
+
       render json: json_response
     end
 
