@@ -18,6 +18,7 @@ class Delayed::Job
   PENDING = Status.new('pending').freeze
   PROCESSING = Status.new('processing').freeze
   FAILING = Status.new('failing').freeze
+  FAILED = Status.new('failed').freeze
 
   def apply_handlers
     DelayedJobAdmin.destroy_handlers.each do |clazz|
@@ -27,6 +28,7 @@ class Delayed::Job
   end
 
   def status
+    return FAILED if self.failed_at
     return FAILING if self.last_error
     self.locked_at ? PROCESSING : PENDING
   end
