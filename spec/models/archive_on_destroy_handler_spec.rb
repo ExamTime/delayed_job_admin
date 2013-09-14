@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DelayedJobAdmin::ArchiveOnDestroyHandler do
-  before :all do
+  before :each do
     job = DummyModel.create(name: 'Model in queue').delay.method_to_queue('in queue')
     @handler = DelayedJobAdmin::ArchiveOnDestroyHandler.new(job)
   end

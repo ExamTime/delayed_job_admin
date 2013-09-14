@@ -96,13 +96,27 @@ describe DelayedJobAdmin::JobsController do
         end
 
         describe "and the job has errored during processing" do
-          before :each do
-            @job.fail!
+          context "when the job is still being attempted" do
+            before :each do
+              @job.last_error = 'Some dummy error message'
+              @job.save!
+            end
+
+            it "should return json indicating the job is failing" do
+              get :status, id: @job.id, use_route: :delayed_job_admin
+              JSON.parse(response.body)['status'].should == 'failing'
+            end
           end
 
-          it "should return json indicating the job has failed" do
-            get :status, id: @job.id, use_route: :delayed_job_admin
-            JSON.parse(response.body)['status'].should == 'failing'
+          context "when the job has exhausted all attmepts" do
+            before :each do
+              @job.fail!
+            end
+
+            it "should return json indicating the job has failed" do
+              get :status, id: @job.id, use_route: :delayed_job_admin
+              JSON.parse(response.body)['status'].should == 'failed'
+            end
           end
         end
       end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Delayed::Job do
-  before :all do
+  before :each do
     @job = Delayed::Job.new
   end
 
@@ -56,21 +56,31 @@ describe Delayed::Job do
     end
 
     describe '#status' do
-      it 'should return PENDING if locked_at is nil and last_error is nil' do
-        @job.locked_at = nil
-        @job.last_error = nil
-        @job.status.should == Delayed::Job::PENDING
-      end
+      context 'where failed_at and last_error are both nil' do
+        before :each do
+          @job.failed_at = nil
+          @job.last_error = nil
+        end
 
-      it 'should return PROCESSING if locked_at is not nil and failed_at is nil' do
-        @job.locked_at = DateTime.now - 20.minutes
-        @job.failed_at = nil
-        @job.status.should == Delayed::Job::PROCESSING
+        it 'should return PENDING if locked_at is nil' do
+          @job.locked_at = nil
+          @job.status.should == Delayed::Job::PENDING
+        end
+
+        it 'should return PROCESSING if locked_at is not nil' do
+          @job.locked_at = DateTime.now - 20.minutes
+          @job.status.should == Delayed::Job::PROCESSING
+        end
       end
 
       it 'should return FAILING if last_error is not nil' do
         @job.last_error = 'Failed job'
         @job.status.should == Delayed::Job::FAILING
+      end
+
+      it 'should return FAILED if failed_at is not nil' do
+        @job.failed_at = DateTime.now - 20.minutes
+        @job.status.should == Delayed::Job::FAILED
       end
     end
 
