@@ -22,6 +22,50 @@ describe DelayedJobAdmin do
     end
   end
 
+  describe "alert_thresholds" do
+    it "should be defined" do
+      DelayedJobAdmin.alert_thresholds.should_not be_nil
+    end
+
+    it "should be a hash with a single entry" do
+      DelayedJobAdmin.alert_thresholds.should be_a Hash
+      DelayedJobAdmin.alert_thresholds.size.should == 1
+    end
+
+    it "should contain a single 'default' entry with a threshold value of 20" do
+      DelayedJobAdmin.alert_thresholds['default'].should == 20
+    end
+  end
+
+  describe "alert_strategies" do
+    it "should be defined" do
+      DelayedJobAdmin.alert_strategies.should_not be_nil
+    end
+
+    it "should be a hash with a single instance" do
+      DelayedJobAdmin.alert_strategies.should be_a Hash
+      DelayedJobAdmin.alert_strategies.size.should == 1
+    end
+
+    describe "default configuration" do
+      it "should contain a default class of 'DelayedJobAdmin::EmailAlertStrategy'" do
+        DelayedJobAdmin.alert_strategies.keys.first.should == DelayedJobAdmin::EmailAlertStrategy
+      end
+
+      it "should have configured options hash with a single entry" do
+        options = DelayedJobAdmin.alert_strategies.fetch(DelayedJobAdmin::EmailAlertStrategy)
+        options.should be_a Hash
+        options.size.should == 1
+      end
+
+      it "should have configured options with a key of :emails and an array of emails" do
+        options = DelayedJobAdmin.alert_strategies[DelayedJobAdmin::EmailAlertStrategy]
+        options.keys.should include :emails
+        options.fetch(:emails).should be_a Array
+      end
+    end
+  end
+
   describe "dependency" do
 
     describe "DelayedJob" do
