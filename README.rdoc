@@ -24,6 +24,39 @@ Rails.application.routes.draw do
 end
 `
 
+The install script will create three new files in your application:
+*  db/migrate/xxx_create_delayed_job_admin_archived_delayed_jobs.rb
+*  config/initializers/delayed_job_admin.rb
+*  config/locales/delayed_job_admin.en.yml
+
+=== What do you get
+
+1. You will have a dashboard to view your delayed_jobs.  This should reside at the following URL
+
+   <mounted_path>/jobs
+
+2. A facility to remove jobs from the delayed_jobs table.
+   You can write your own destroy handler and configure it in the config/initializers/delayed_job_admin.rb.
+   The handler will be instantiated with a single parameter of the job to be 'destroyed' and must expose 
+   a #handle method that will be invoked on the destroy action.
+   Multiple destroy handlers can be configured in this array and they will be run in sequence, triggered by the destroy
+   action.
+
+   The handling of the destroy action is configurable, however the default behaviour uses the ArchiveOnDestroyHandler.
+   This handler will delete the job from the delayed_jobs table and store it in the archived_delayed_jobs table.
+   This is a paranoid approach, but fits current requirements to move the job from the active queue for manual 
+   investigation later.
+   To this end, the archived_delayed_jobs is a dead end table that will not be interacted with.  Restoring or deleting jobs
+   from this table is a manual job.
+
+3. An API for querying the status of a job, given an ID. Paired with this is a poll_job.js utility that you can drop on any of
+   your pages that should make it straightforward to async user-triggered tasks but still provide a synchronous-like behaviour.
+   See spec/dummy for an example of its usage
+
+4. (IN FUTURE) Automatic alerts for your delayed job queues, with configurable alert thresholds and configurable alert handlers.
+
+
+
 === Getting started with development (i.e. running tests)
 
   1. Clone the repo from GitHub git@github.com:ExamTime/ninja_access.git
