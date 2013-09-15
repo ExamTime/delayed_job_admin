@@ -2,6 +2,7 @@ module DelayedJobAdmin
   class JobsController < DelayedJobAdmin::ApplicationController
     def index
       @jobs = Delayed::Job.all
+      render 'delayed_job_admin/shared/index'
     end
 
     def status

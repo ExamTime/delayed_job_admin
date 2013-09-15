@@ -1,0 +1,55 @@
+= stylesheet_link_tag    "delayed_job_admin/jobs"
+= javascript_include_tag "delayed_job_admin/jobs"
+- base_key = "delayed_job_admin.#{@archive ? 'archived_' : ''}delayed_jobs"
+
+%h1= t("#{base_key}.titles.index")
+
+- if @jobs.empty?
+  %p= t("#{base_key}.no_queued_jobs")
+- else
+  %table.jobs
+    %thead
+      %tr
+        %th= t("#{base_key}.table.id")
+        %th= t("#{base_key}.table.priority")
+        %th= t("#{base_key}.table.attempts")
+        %th= t("#{base_key}.table.handler")
+        %th= t("#{base_key}.table.last_error")
+        %th= t("#{base_key}.table.run_at")
+        %th= t("#{base_key}.table.locked_at")
+        %th= t("#{base_key}.table.queue")
+        %th= t("#{base_key}.table.created_at")
+        %th= t("#{base_key}.table.updated_at")
+        - if @archive
+          %th= t("delayed_job_admin.archived_delayed_jobs.table.archived_at")
+          %th= t("delayed_job_admin.archived_delayed_jobs.table.archive_note")
+        - else
+          %th= t('delayed_job_admin.delayed_jobs.table.status')
+          %th
+    %tbody
+      - @jobs.each do |job|
+        %tr{ id: "job_id_#{job.id}" }
+          %td= job.id
+          %td= job.priority
+          %td= job.attempts
+          %td= render 'shared/truncated_value', { value: job.handler, length: 50 }
+          %td= render 'shared/truncated_value', { value: job.last_error, length: 50 }
+          %td= job.run_at
+          %td= job.locked_at
+          %td= job.queue
+          %td= job.created_at
+          %td= job.updated_at
+          - if @archive
+            %td= job.archived_at
+            %td= job.archive_note
+          - else
+            %td{ class: job.status.to_s }
+              = job.status
+            %td
+              - if job.status.to_s == 'failing'
+                = link_to t('delayed_job_admin.delayed_jobs.table.failing_job.destroy'), job_path(job), confirm: 'Are you sure?', method: :delete
+
+- if @archive
+  = link_to t('delayed_job_admin.links.jobs'), jobs_path, class: 'delayed_job_admin_navigation_link'
+- else
+  = link_to t('delayed_job_admin.links.archived_jobs'), archived_jobs_path, class: 'delayed_job_admin_navigation_link'
