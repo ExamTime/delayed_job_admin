@@ -3,6 +3,8 @@ en:
     links:
       archived_jobs: Archives
       jobs: Jobs
+      more: More
+      less: Less
     delayed_jobs:
       no_queued_jobs: No queued jobs
       titles:
