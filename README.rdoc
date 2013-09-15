@@ -10,10 +10,10 @@ Add the gem to your Gemfile
 `gem 'delayed_job_admin'`
 
 Run the install 
-`rails g delayed_job_admin:install`
+`bundle exec rails g delayed_job_admin:install`
 
 Run the migrations (adds a delayed_jobs_archive table)
-`rake db:migrate`
+`bundle exec rake db:migrate`
 
 Mount the engine in your routes.rb
 `
