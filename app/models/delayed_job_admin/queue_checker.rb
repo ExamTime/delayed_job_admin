@@ -15,11 +15,14 @@ module DelayedJobAdmin
     end
 
     def check_queue_against_threshold(queue_name, threshold)
-      DelayedJobAdmin::QueueAlert.new(queue_name, threshold+1)
+      queue_depth = Delayed::Job.where(queue: queue_name).count
+      (queue_depth > threshold) ? DelayedJobAdmin::QueueAlert.new(queue_name, queue_depth) : nil
     end
 
     def raise_queue_alert(alert)
-
+      DelayedJobAdmin::alert_strategies.each do |clazz, options|
+        clazz.new(alert, options).alert
+      end
     end
 
     private

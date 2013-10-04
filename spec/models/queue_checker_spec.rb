@@ -50,10 +50,39 @@ describe DelayedJobAdmin::QueueChecker do
       end
     end
 
+    class DummyStrategy; end
+    class AnotherDummyStrategy; end
+
     describe '#raise_queue_alert' do
+      let(:dummy_alert){ double('dummy_alert') }
+      let(:dummy_options){ { "test" => {} } }
+      let(:dummy_config){ {DummyStrategy => dummy_options, AnotherDummyStrategy => dummy_options} }
+      let(:dummy_strategy){ d = double('alert_strategy'); d.stub(:alert); d }
+
+      it 'should loop over all the configured alert strategies, instantiate and issue the #alert call' do
+        DelayedJobAdmin::alert_strategies = dummy_config
+        dummy_config.each do |clazz, config|
+          clazz.should_receive(:new).with(dummy_alert, dummy_options).and_return(dummy_strategy)
+          dummy_strategy.should_receive(:alert)
+        end
+        instance.raise_queue_alert(dummy_alert)
+      end
+
     end
 
     describe '#check_queue_against_threshold' do
+      it 'should return a QueueAlert object for the alert if the queue_depth is exceeded' do
+        Delayed::Job.stub_chain(:where, :count).and_return(6)
+        result = instance.check_queue_against_threshold('test', 5)
+        result.queue_name.should == 'test'
+        result.queue_depth.should == 6
+      end
+
+      it 'should return nil if the queue_depth is not exceeded' do
+        Delayed::Job.stub_chain(:where, :count).and_return(5)
+        result = instance.check_queue_against_threshold('test', 5)
+        result.should be_nil
+      end
     end
   end
 
