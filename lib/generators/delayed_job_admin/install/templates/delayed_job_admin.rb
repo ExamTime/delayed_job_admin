@@ -28,12 +28,12 @@ DelayedJobAdmin.setup do |config|
   # if this value is over 20.
   # A more customized example may be, for example,
   #
-  #     config.alert_thresholds = { 'mail' => 200, 'scrape' => 1000, 'default' => 1000 }
+  #     config.alert_thresholds = { 'mail' => 200, 'scrape' => 1000, '__all__' => 1000 }
   #
   # Here we define that the individual named queues of 'mail' and 'scrape' should trigger thresholds when
   # the total number of Delayed::Jobs exceeds 200 and 1000, respectively.  Asides from these named queues,
   # we also stipulate that an alert should be raised any time the total queue depth exceeds 1000.
-  config.alert_thresholds = { 'default' => 20 }
+  config.alert_thresholds = { '__all__' => 20 }
 
   ##########################################################################################################
   #  QUEUE ALERTS - Alert strategies
@@ -52,7 +52,7 @@ DelayedJobAdmin.setup do |config|
   # of the emails listed in the options hash, i.e. the options hash for the EmailAlertStrategy MUST have a
   # key of :emails with at least one valid email, otherwise an ArgumentError will result.
   config.alert_strategies = { DelayedJobAdmin::EmailAlertStrategy => {emails: ['joe@example.com']} }
-  
+
   ##########################################################################################################
   #  JOB POLLING
   ##########################################################################################################
