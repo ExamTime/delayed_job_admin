@@ -1,19 +1,17 @@
 module DelayedJobAdmin
   class EmailAlertStrategy
-=begin
-    attr_accessor :job, :audit_log
+    attr_accessor :queue_alert, :emails
 
-    def initialize(job, audit_log='<blank>')
-      self.job = job
-      self.audit_log = audit_log
+    def initialize(queue_alert, emails)
+      raise ArgumentError, "EmailAlertStrategy must be passed an alert" unless queue_alert
+      raise ArgumentError, "EmailAlertStrategy must be passed an emails array" unless emails
+      @queue_alert = queue_alert
+      @emails = emails
     end
 
-    def handle
-      ActiveRecord::Base.transaction do
-        DelayedJobAdmin::ArchivedJob.create!(job: self.job, archive_note: audit_log)
-        job.destroy
-      end
+    def alert
+
+      mail(:to => emails.join(','), subject: alert_message)
     end
-=end
   end
 end
