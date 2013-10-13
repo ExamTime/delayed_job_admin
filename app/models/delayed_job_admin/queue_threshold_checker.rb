@@ -1,5 +1,5 @@
 module DelayedJobAdmin
-  class QueueChecker
+  class QueueThresholdChecker
     attr_reader :queue_thresholds
 
     def initialize(queue_thresholds)
@@ -7,16 +7,16 @@ module DelayedJobAdmin
       @queue_thresholds = queue_thresholds
     end
 
-    def check_queues
+    def run_check
       queue_thresholds.each do |queue_name, threshold|
         alert = check_queue_against_threshold(queue_name, threshold)
-        raise_queue_alert(alert) if alert
+        raise_queue_alert(alert) unless (alert==:queue_ok)
       end
     end
 
     def check_queue_against_threshold(queue_name, threshold)
       queue_depth = Delayed::Job.where(queue: queue_name).count
-      (queue_depth > threshold) ? DelayedJobAdmin::QueueAlert.new(queue_name, queue_depth) : nil
+      (queue_depth > threshold) ? DelayedJobAdmin::QueueAlert.new(queue_name, queue_depth, threshold) : :queue_ok
     end
 
     def raise_queue_alert(alert)
@@ -28,7 +28,8 @@ module DelayedJobAdmin
     private
 
     def instantiation_error_message
-      'QueueChecker must be instantiated with a Hash representing the configured alert thresholds for different queues'
+      'QueueThresholdChecker must be instantiated with a Hash representing ' +
+      'the configured alert thresholds for different queues'
     end
   end
 end

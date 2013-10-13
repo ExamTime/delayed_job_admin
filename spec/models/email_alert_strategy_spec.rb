@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe DelayedJobAdmin::EmailAlertStrategy do
-  let(:instance){ DelayedJobAdmin::EmailAlertStrategy.new }
+  let(:dummy_alert) { double('alert') }
+  let(:instance){ DelayedJobAdmin::EmailAlertStrategy.new(dummy_alert, { emails: 'joe@example.com' }) }
 
   it 'should be defined' do
     DelayedJobAdmin::EmailAlertStrategy.should_not be_nil

@@ -5,15 +5,22 @@ require "haml"
 module DelayedJobAdmin
   mattr_accessor :destroy_handlers,
                  :default_poll_interval_in_secs,
-                 :alert_thresholds,
+                 :monitoring_strategies,
                  :alert_strategies
 
   @@destroy_handlers = nil
   @@default_poll_interval_in_secs = nil
-  @@alert_thresholds = nil
+  @@monitoring_strategies = nil
   @@alert_strategies = nil
 
   def self.setup
     yield self
+  end
+
+  def self.check_queues
+    DelayedJobAdmin.monitoring_strategies.each do |clazz, init_config|
+      checker = clazz.new(init_config)
+      checker.run_check
+    end
   end
 end

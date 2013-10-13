@@ -42,6 +42,10 @@ en:
         updated_at: Updated at
         archived_at: Archived at
         archive_note: Archive note
+    alert_strategies:
+      email_alert_strategy:
+        alert_email:
+          subject: "ALERT: Queue depth on '%{queue_name}' has exceeded the threshold of %{threshold}"
     destroy_job:
       success: "The delayed job has been successfully destroyed."
       failure: "There has been an error when destroying this delayed job."

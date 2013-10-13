@@ -15,10 +15,44 @@ DelayedJobAdmin.setup do |config|
   config.destroy_handlers = [ DelayedJobAdmin::ArchiveOnDestroyHandler ]
 
   ##########################################################################################################
-  #  QUEUE ALERTS - Thresholds
+  #  QUEUE MONITORING STRATEGIES
   ##########################################################################################################
-  # A hash representation of the the threshold levels that should be monitored on the Delayed::Jobs table.
-  # The threshold checker is quite simplistic, it just counts the total number of jobs in the named queue.
+  # A hash representation of the strategies that should be adopted to monitor the delayed_jobs queue.
+  #
+  # Each configured class will be instantiated with the hash of configured parameters passed to #new.
+  # The configured class must also expose a method of #run_check, which will be invoked to execute the check.
+  #
+  # The default strategy configured below is the QueueThresholdChecker, which simply checks the queue
+  # depth against configured values.  When the configured values are exceeded alerts are triggered (see the
+  # section on QUEUE ALERTS below).
+  #
+  # The user may extend this with custom monitoring strategies. The key should be the class constant for the
+  # configured monitoring strategy, the value should be an options hash that will be passed to the monitoring
+  # strategy on initialization.
+  #
+  # E.g. one could potentially extend this with other custom monitoring strategies for when individual jobs have
+  # failed more than a configured number of times, or individual jobs have been in the queue for a time
+  # greater than a configured limit etc.
+  #
+  # To run a check on the queues, using your configured monitoring strategies, you simply invoke the module-
+  # level function from the console:
+  #
+  # (Rails console)>> DelayedJobAdmin::check_queues
+  #
+  # Alternatively, you could invoke the rake task that simply wraps this function invocation:
+  #
+  # >> bundle exec rake delayed_job_admin::check_queues
+  #
+  # The intention is that the client can call this rake task in some scheduled fashion, e.g. using cron.
+  #
+  #### QueueThresholdChecker
+  #
+  # This default monitoring strategy is quite simplistic, it just counts the total number of jobs in the
+  # named queue. It should be configured with a hash to define the acceptable thresholds for different named 
+  # queues.
+  #
+  # The config must define a hash representation of the the threshold levels that should be monitored on
+  # the Delayed::Jobs table. The threshold checker just counts the total number of jobs in the named queue.
   # It makes no distinction between failing and pending jobs.
   # If there are failing jobs that are triggering your alert threshold you can:
   #     1. Change your alert threshold levels
@@ -26,17 +60,18 @@ DelayedJobAdmin.setup do |config|
   #
   # The default behaviour will just look at the total number of jobs in the queue and will raise an alert
   # if this value is over 20.
-  # A more customized example may be, for example,
+  # A more customized example would be:
   #
-  #     config.alert_thresholds = { 'mail' => 200, 'scrape' => 1000, '__all__' => 1000 }
+  #     config.monitoring_strategies =
+  #       { DelayedJobAdmin::QueueThresholdStrategy => 'mail' => 200, 'scrape' => 1000, '__all__' => 1000 }
   #
-  # Here we define that the individual named queues of 'mail' and 'scrape' should trigger thresholds when
+  # Here we define that the individual named queues of 'mail' and 'scrape' should trigger alerts when
   # the total number of Delayed::Jobs exceeds 200 and 1000, respectively.  Asides from these named queues,
   # we also stipulate that an alert should be raised any time the total queue depth exceeds 1000.
-  config.alert_thresholds = { '__all__' => 20 }
+  config.monitoring_strategies = { DelayedJobAdmin::QueueThresholdChecker => { '__all__' => 20 } }
 
   ##########################################################################################################
-  #  QUEUE ALERTS - Alert strategies
+  #  QUEUE ALERTS STRATEGIES
   ##########################################################################################################
   # Configure an array of alert_strategies that will be called when the JobsThresholdChecker raises a
   # ThresholdAlert. The key should be the class constant for the configured alert strategy, the value should
