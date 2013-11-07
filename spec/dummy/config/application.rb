@@ -61,6 +61,9 @@ module Dummy
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Setting a default from email for dummy application, to allow specs to run
+    ActionMailer::Base.default :from => 'Dummy <dummy@example.com>'
   end
 end
 

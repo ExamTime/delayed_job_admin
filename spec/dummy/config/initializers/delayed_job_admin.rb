@@ -18,6 +18,10 @@ DelayedJobAdmin.setup do |config|
   #  QUEUE MONITORING STRATEGIES
   ##########################################################################################################
   # A hash representation of the strategies that should be adopted to monitor the delayed_jobs queue.
+  #
+  # Each configured class will be instantiated with the hash of configured parameters passed to #new.
+  # The configured class must also expose a method of #run_check, which will be invoked to execute the check.
+  #
   # The default strategy configured below is the QueueThresholdChecker, which simply checks the queue
   # depth against configured values.  When the configured values are exceeded alerts are triggered (see the
   # section on QUEUE ALERTS below).
@@ -26,7 +30,7 @@ DelayedJobAdmin.setup do |config|
   # configured monitoring strategy, the value should be an options hash that will be passed to the monitoring
   # strategy on initialization.
   #
-  # One could potentially extend this with other custom monitoring strategies for when individual jobs have
+  # E.g. one could potentially extend this with other custom monitoring strategies for when individual jobs have
   # failed more than a configured number of times, or individual jobs have been in the queue for a time
   # greater than a configured limit etc.
   #
