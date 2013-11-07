@@ -15,7 +15,7 @@ module DelayedJobAdmin
     end
 
     def check_queue_against_threshold(queue_name, threshold)
-      queue_depth = Delayed::Job.where(queue: queue_name).count
+      queue_depth = (queue_name=='__all__' ? Delayed::Job.count : Delayed::Job.where(queue: queue_name).count)
       (queue_depth > threshold) ? DelayedJobAdmin::QueueAlert.new(queue_name, queue_depth, threshold) : :queue_ok
     end
 

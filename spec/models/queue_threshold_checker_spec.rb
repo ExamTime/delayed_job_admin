@@ -81,9 +81,21 @@ describe DelayedJobAdmin::QueueThresholdChecker do
       end
 
       it 'should return :ok if the queue_depth is not exceeded' do
-        Delayed::Job.stub_chain(:where, :count).and_return(5)
-        result = instance.check_queue_against_threshold('test', 5)
-        result.should == :queue_ok
+        (0...5).each do |depth|
+          Delayed::Job.stub_chain(:where, :count).and_return(depth)
+          result = instance.check_queue_against_threshold('test', depth)
+          result.should == :queue_ok
+        end
+      end
+
+      it 'should execute the count for a specific queue, where the queue name is supplied' do
+        Delayed::Job.should_receive(:where).with({queue: 'test'}).and_call_original
+        instance.check_queue_against_threshold('test', 9)
+      end
+
+      it "should execute the count for all queues when a queue name of '__all__' is specified" do
+        Delayed::Job.should_receive(:count).and_return(0)
+        instance.check_queue_against_threshold('__all__', 9)
       end
     end
   end
