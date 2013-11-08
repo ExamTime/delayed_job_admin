@@ -86,11 +86,11 @@ describe DelayedJobAdmin::JobsController do
       end
     end
 
-    describe "GET #status" do
+    describe "GET #job_status" do
       describe "when job is in the queue" do
         describe "and the job has not yet been processed" do
           it "should return json indicating job is pending" do
-            get :status, id: @job.id, use_route: :delayed_job_admin
+            get :job_status, id: @job.id, use_route: :delayed_job_admin
             JSON.parse(response.body)['status'].should == 'pending'
           end
         end
@@ -103,7 +103,7 @@ describe DelayedJobAdmin::JobsController do
             end
 
             it "should return json indicating the job is failing" do
-              get :status, id: @job.id, use_route: :delayed_job_admin
+              get :job_status, id: @job.id, use_route: :delayed_job_admin
               JSON.parse(response.body)['status'].should == 'failing'
             end
           end
@@ -114,7 +114,7 @@ describe DelayedJobAdmin::JobsController do
             end
 
             it "should return json indicating the job has failed" do
-              get :status, id: @job.id, use_route: :delayed_job_admin
+              get :job_status, id: @job.id, use_route: :delayed_job_admin
               JSON.parse(response.body)['status'].should == 'failed'
             end
           end
@@ -123,7 +123,7 @@ describe DelayedJobAdmin::JobsController do
 
       describe "when job is not in the queue" do
         it "should return json indicating the job could not be found" do
-          get :status, id: 99, use_route: :delayed_job_admin
+          get :job_status, id: 99, use_route: :delayed_job_admin
           JSON.parse(response.body)['status'].should == 'none'
         end
       end
