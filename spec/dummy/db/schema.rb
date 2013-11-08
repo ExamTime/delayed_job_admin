@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131107154205) do
+ActiveRecord::Schema.define(:version => 20131108161912) do
 
   create_table "delayed_job_admin_archived_jobs", :force => true do |t|
     t.integer  "priority",     :default => 0, :null => false

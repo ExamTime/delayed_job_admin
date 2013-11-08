@@ -93,4 +93,12 @@ DelayedJobAdmin.setup do |config|
   ##########################################################################################################
   # Configure details for the JS polling of the delayed_jobs table for status
   config.default_poll_interval_in_secs = 5
+
+  ##########################################################################################################
+  #  CONFIGURABLE ROUTES
+  ##########################################################################################################
+  # Configure the resource names that will be used to access jobs and archived_jobs
+  config.job_resource_name = 'job'
+  config.archived_job_resource_name = 'archived_job'
+
 end

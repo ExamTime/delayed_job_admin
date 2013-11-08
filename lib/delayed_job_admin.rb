@@ -6,12 +6,16 @@ module DelayedJobAdmin
   mattr_accessor :destroy_handlers,
                  :default_poll_interval_in_secs,
                  :monitoring_strategies,
-                 :alert_strategies
+                 :alert_strategies,
+                 :job_resource_name,
+                 :archived_job_resource_name
 
   @@destroy_handlers = nil
   @@default_poll_interval_in_secs = nil
   @@monitoring_strategies = nil
   @@alert_strategies = nil
+  @@job_resource_name = nil
+  @@archived_job_resource_name = nil
 
   def self.setup
     yield self
