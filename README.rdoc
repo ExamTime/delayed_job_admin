@@ -24,6 +24,28 @@ Rails.application.routes.draw do
 end
 `
 
+Instead of mounting the engine you can choose to just include the controller
+behaviour in your own controller heirarchy. This can be done by exploiting
+the modules
+* DelayedJobAdmin::AccessibleJobs
+* DelayedJobAdmin::AccessibleArchivedJobs
+
+`
+class Admin::DelayedJobsController < Admin::BaseController
+  include DelayedJobAdmin::AccessibleJobs
+end
+`
+
+You will then, obviously, need to explicitly add your controller routes to your application:
+`
+resources :delayed_jobs, :only => [:index, :destroy] do
+  member do
+    get :job_status
+  end
+end
+resources :archived_delayed_jobs, :only => [:index]
+`
+
 The install script will create three new files in your application:
 *  db/migrate/xxx_create_delayed_job_admin_archived_delayed_jobs.rb
 *  config/initializers/delayed_job_admin.rb
