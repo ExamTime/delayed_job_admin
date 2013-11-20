@@ -18,12 +18,13 @@ module DelayedJobAdmin
     def destroy
       @job = Delayed::Job.find(params.fetch(:id).to_i)
       success = true
+      target_url = self.send("#{DelayedJobAdmin::job_resource_name.pluralize}_url")
       begin
         @job.apply_handlers
-        redirect_to jobs_url, flash: { notice: I18n.t('delayed_job_admin.destroy_job.success') }
+        redirect_to target_url, flash: { notice: I18n.t('delayed_job_admin.destroy_job.success') }
       rescue StandardError => e
         Rails.logger.warn("#{e.message}:\n\n #{e.backtrace}")
-        redirect_to jobs_url, flash: { error: I18n.t('delayed_job_admin.destroy_job.failure') }
+        redirect_to target_url, flash: { error: I18n.t('delayed_job_admin.destroy_job.failure') }
       end
     end
   end

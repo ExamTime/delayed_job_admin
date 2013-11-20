@@ -47,11 +47,9 @@
               = job.status
             %td
               - if job.status.to_s == 'failing'
-                - binding.pry
                 = link_to t('delayed_job_admin.delayed_jobs.table.failing_job.destroy'), self.send("#{DelayedJobAdmin::job_resource_name}_path", job), confirm: 'Are you sure?', method: :delete
 
-- binding.pry
 - if @archive
-  = link_to t('delayed_job_admin.links.jobs'), view_context.send("#{DelayedJobAdmin::job_resource_name.pluralize}_path"), class: 'delayed_job_admin_navigation_link'
+  = link_to t('delayed_job_admin.links.jobs'), self.send("#{DelayedJobAdmin::job_resource_name.pluralize}_path"), class: 'delayed_job_admin_navigation_link'
 - else
-  = link_to t('delayed_job_admin.links.archived_jobs'), view_context.send("#{DelayedJobAdmin::archived_job_resource_name.pluralize}_path"), class: 'delayed_job_admin_navigation_link'
+  = link_to t('delayed_job_admin.links.archived_jobs'), self.send("#{DelayedJobAdmin::archived_job_resource_name.pluralize}_path"), class: 'delayed_job_admin_navigation_link'
