@@ -92,7 +92,10 @@ DelayedJobAdmin.setup do |config|
   #  JOB POLLING
   ##########################################################################################################
   # Configure details for the JS polling of the delayed_jobs table for status
+  # Set the default interval between poll requests
   config.default_poll_interval_in_secs = 5
+  # Set the URL for retrieval of a job status
+  config.job_status_path = '/delayed_job_admin/jobs/:id/job_status'
 
   ##########################################################################################################
   #  CONFIGURABLE ROUTES
