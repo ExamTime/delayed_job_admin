@@ -8,7 +8,8 @@ module DelayedJobAdmin
                  :monitoring_strategies,
                  :alert_strategies,
                  :job_resource_name,
-                 :archived_job_resource_name
+                 :archived_job_resource_name,
+                 :job_status_path
 
   @@destroy_handlers = nil
   @@default_poll_interval_in_secs = nil
@@ -16,6 +17,7 @@ module DelayedJobAdmin
   @@alert_strategies = nil
   @@job_resource_name = nil
   @@archived_job_resource_name = nil
+  @@job_status_path = nil
 
   def self.setup
     yield self
