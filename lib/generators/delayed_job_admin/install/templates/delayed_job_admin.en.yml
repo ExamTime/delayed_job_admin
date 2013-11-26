@@ -46,7 +46,7 @@ en:
       send_alert:
         subject: "ALERT: Queue depth on '%{queue_name}' has exceeded the threshold of %{threshold}"
         intro: "You are receiving this email as your email has been added to the configured list of users to be notified when the delayed job queue depth exceeds the configured limits."
-        message: "WARNING:: The queue name '%{queue}' has a queue depth of %i{depth}, exceeding the configured threshold of %{threshold} jobs."
+        message: "WARNING:: The queue name '%{queue}' has a queue depth of %{depth}, exceeding the configured threshold of %{threshold} jobs."
         footer: "If you do not think you should be receiving this email please contact a dev team member, and ask them to reconfigure these alerts."
     destroy_job:
       success: "The delayed job has been successfully destroyed."
