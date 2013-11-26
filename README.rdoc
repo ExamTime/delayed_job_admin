@@ -75,8 +75,12 @@ The install script will create three new files in your application:
    your pages that should make it straightforward to async user-triggered tasks but still provide a synchronous-like behaviour.
    See spec/dummy for an example of its usage
 
-4. (IN FUTURE) Automatic alerts for your delayed job queues, with configurable alert thresholds and configurable alert handlers.
+4. Automatic alerts for your delayed job queues, with configurable alert thresholds and configurable alert handlers.
+   There is a rake task that can be kicked off to monitor queue depth:
 
+     >> bundle exec rake delayed_job_admin:check_queues
+
+  The idea would be that this task could be run via a cron job.
 
 
 === Getting started with development (i.e. running tests)
