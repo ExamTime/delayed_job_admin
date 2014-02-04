@@ -4,6 +4,8 @@
 
 %h1= t("#{base_key}.titles.index")
 
+= paginate @jobs
+
 - if @jobs.empty?
   %p= t("#{base_key}.no_queued_jobs")
 - else

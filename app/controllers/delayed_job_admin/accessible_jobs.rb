@@ -1,7 +1,7 @@
 module DelayedJobAdmin
   module AccessibleJobs
     def index
-      @jobs = Delayed::Job.all
+      @jobs = Delayed::Job.page(params[:page]).per(DelayedJobAdmin::pagination_jobs_per_page)
       render 'delayed_job_admin/shared/index'
     end
 

@@ -95,7 +95,7 @@ DelayedJobAdmin.setup do |config|
   # Set the default interval between poll requests
   config.default_poll_interval_in_secs = 5
   # Set the URL for retrieval of a job status
-  config.job_status_path = '/delayed_job_admin/jobs/:id/job_status'
+  config.job_status_path = '/jobs/:id/job_status'
 
   ##########################################################################################################
   #  CONFIGURABLE ROUTES
@@ -103,5 +103,11 @@ DelayedJobAdmin.setup do |config|
   # Configure the resource names that will be used to access jobs and archived_jobs
   config.job_resource_name = 'job'
   config.archived_job_resource_name = 'archived_job'
+
+  ##########################################################################################################
+  #  JOBS/ARCHIVED JOBS INDEX PAGINATION
+  ##########################################################################################################
+  # Configure the number of jobs to be displayed per page on the jobs and archived jobs index pages
+  config.pagination_jobs_per_page = 20
 
 end

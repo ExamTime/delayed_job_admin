@@ -104,4 +104,10 @@ DelayedJobAdmin.setup do |config|
   config.job_resource_name = 'job'
   config.archived_job_resource_name = 'archived_job'
 
+  ##########################################################################################################
+  #  JOBS/ARCHIVED JOBS INDEX PAGINATION
+  ##########################################################################################################
+  # Configure the number of jobs to be displayed per page on the jobs and archived jobs index pages
+  config.pagination_jobs_per_page = 20
+
 end

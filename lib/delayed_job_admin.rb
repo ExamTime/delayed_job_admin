@@ -1,6 +1,7 @@
 require "delayed_job_admin/engine"
 require "delayed_job_active_record"
 require "haml"
+require "kaminari"
 
 module DelayedJobAdmin
   mattr_accessor :destroy_handlers,
@@ -9,7 +10,8 @@ module DelayedJobAdmin
                  :alert_strategies,
                  :job_resource_name,
                  :archived_job_resource_name,
-                 :job_status_path
+                 :job_status_path,
+                 :pagination_jobs_per_page
 
   @@destroy_handlers = nil
   @@default_poll_interval_in_secs = nil
@@ -18,6 +20,7 @@ module DelayedJobAdmin
   @@job_resource_name = nil
   @@archived_job_resource_name = nil
   @@job_status_path = nil
+  @@pagination_jobs_per_page = nil
 
   def self.setup
     yield self

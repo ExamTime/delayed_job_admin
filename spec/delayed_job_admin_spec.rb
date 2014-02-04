@@ -8,13 +8,23 @@ describe DelayedJobAdmin do
   [ :destroy_handlers, :destroy_handlers=, :monitoring_strategies, :monitoring_strategies=, 
     :alert_strategies, :alert_strategies=, :check_queues, :job_resource_name, :job_resource_name=,
     :archived_job_resource_name, :archived_job_resource_name=, :job_status_path,
-    :job_status_path= ].each do |method|
+    :job_status_path=, :pagination_jobs_per_page, :pagination_jobs_per_page= ].each do |method|
     it "should expose the method '#{method}'" do
       DelayedJobAdmin.should respond_to method
     end
   end
 
   describe "default config" do
+    describe "pagination_jobs_per_page" do
+      it "should be defined" do
+        DelayedJobAdmin.pagination_jobs_per_page.should_not be_nil
+      end
+
+      it "should have a default value of '20'" do
+        DelayedJobAdmin.pagination_jobs_per_page.should == 20
+      end
+    end
+
     describe "job_resource_name" do
       it "should be defined" do
         DelayedJobAdmin.job_resource_name.should_not be_nil
@@ -40,8 +50,8 @@ describe DelayedJobAdmin do
         DelayedJobAdmin.job_status_path.should_not be_nil
       end
 
-      it "should have a default value of '/delayed_job_admin/jobs/:id/job_status'" do
-        DelayedJobAdmin.job_status_path.should == '/delayed_job_admin/jobs/:id/job_status'
+      it "should have a default value of '/jobs/:id/job_status'" do
+        DelayedJobAdmin.job_status_path.should == '/jobs/:id/job_status'
       end
     end
 
