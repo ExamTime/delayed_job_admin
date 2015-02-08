@@ -3,8 +3,8 @@ module DelayedJobAdmin
     def index
       @jobs = Delayed::Job.page(params[:page])
                           .per(DelayedJobAdmin::pagination_jobs_per_page)
-      if blacklist = DelayedJobAdmin.pagination_excluding_queues
-        @jobs = Delayed::Job.where("queue IS NULL OR queue NOT IN (?)", blacklist)
+      if( (blacklist = DelayedJobAdmin.pagination_excluding_queues) && !blacklist.blank? )
+        @jobs = @jobs.where("queue IS NULL OR queue NOT IN (?)", blacklist)
       end
 
       render 'delayed_job_admin/shared/index'
