@@ -105,6 +105,14 @@ DelayedJobAdmin.setup do |config|
   config.archived_job_resource_name = 'archived_job'
 
   ##########################################################################################################
+  #  JOBS/ARCHIVED JOBS INDEX BLACKLIST
+  ##########################################################################################################
+  # Configure the blacklist of job queues that should be excluded in the jobs
+  # index listing.
+  # The default value will be an empty array.
+  config.pagination_excluding_queues = []
+
+  ##########################################################################################################
   #  JOBS/ARCHIVED JOBS INDEX PAGINATION
   ##########################################################################################################
   # Configure the number of jobs to be displayed per page on the jobs and archived jobs index pages

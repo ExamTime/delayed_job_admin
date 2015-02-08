@@ -24,6 +24,14 @@ describe DelayedJobAdmin::JobsController do
     end
 
     describe "GET #index" do
+      before :each do
+        DelayedJobAdmin.stub(:pagination_excluding_queues).and_return(['B'])
+        @queued_model_queue_a = DummyModel.create(name: 'Model in queue A')
+        @queued_model_queue_b = DummyModel.create(name: 'Model in queue B')
+        @job_queue_a = @queued_model_queue_a.delay(queue: 'A').method_to_queue('in queue A')
+        @job_queue_b = @queued_model_queue_b.delay(queue: 'B').method_to_queue('in queue B')
+      end
+
       it "should render the :index template" do
         get :index, use_route: :delayed_job_admin
         response.should render_template :index
@@ -37,6 +45,24 @@ describe DelayedJobAdmin::JobsController do
         queued_models = queued_jobs.map(&:payload_object).map(&:object)
         queued_models.should include @queued_model
         queued_models.should_not include unqueued_model
+      end
+
+      it "should list jobs not assigned to any specific queue" do
+        get :index, use_route: :delayed_job_admin
+        queued_jobs = assigns(:jobs)
+        queued_jobs.should include @job
+      end
+
+      it "should list jobs in non-blacklisted queues" do
+        get :index, use_route: :delayed_job_admin
+        queued_jobs = assigns(:jobs)
+        queued_jobs.should include @job_queue_a
+      end
+
+      it "should not list jobs in blacklisted queues" do
+        get :index, use_route: :delayed_job_admin
+        queued_jobs = assigns(:jobs)
+        queued_jobs.should_not include @job_queue_b
       end
     end
 

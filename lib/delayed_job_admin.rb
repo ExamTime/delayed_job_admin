@@ -11,6 +11,7 @@ module DelayedJobAdmin
                  :job_resource_name,
                  :archived_job_resource_name,
                  :job_status_path,
+                 :pagination_excluding_queues,
                  :pagination_jobs_per_page
 
   @@destroy_handlers = nil
@@ -20,6 +21,7 @@ module DelayedJobAdmin
   @@job_resource_name = nil
   @@archived_job_resource_name = nil
   @@job_status_path = nil
+  @@pagination_excluding_queues = []
   @@pagination_jobs_per_page = nil
 
   def self.setup
