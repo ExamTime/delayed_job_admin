@@ -6,7 +6,7 @@ source "http://rubygems.org"
 gemspec
 
 group :development, :test do
-  gem 'pry-debugger'
+  gem 'pry-byebug'
 end
 
 # Declare any dependencies that are still in development here instead of in
