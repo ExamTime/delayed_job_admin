@@ -6,33 +6,33 @@ describe DelayedJobAdmin::EmailAlertStrategy do
   let(:instance){ DelayedJobAdmin::EmailAlertStrategy.new(dummy_alert, { emails: emails }) }
 
   it 'should be defined' do
-    DelayedJobAdmin::EmailAlertStrategy.should_not be_nil
+    expect(DelayedJobAdmin::EmailAlertStrategy).not_to be_nil
   end
 
   [ :alert ].each do |method|
     it "should respond to the #{method}" do
-      instance.should respond_to method
+      expect(instance).to respond_to method
     end
   end
 
   describe 'instantiation' do
     it 'should be possible when all required arguments are supplied' do
-      instance.should_not be_nil
+      expect(instance).not_to be_nil
     end
 
     it 'should raise an ArgumentError if a queue alert is not supplied' do
-      lambda{ DelayedJobAdmin::EmailAlertStrategy.new(nil, {}) }.should raise_error ArgumentError
+      expect{ DelayedJobAdmin::EmailAlertStrategy.new(nil, {}) }.to raise_error ArgumentError
     end
 
     it 'should raise an ArgumentError if the options hash does not include an :emails key' do
-      lambda{ DelayedJobAdmin::EmailAlertStrategy.new('dummy', {emailer: emails}) }.should raise_error ArgumentError
+      expect{ DelayedJobAdmin::EmailAlertStrategy.new('dummy', {emailer: emails}) }.to raise_error ArgumentError
     end
   end
 
   describe 'instance method' do
     describe '#alert' do
       it 'should invoke the #send_alert method on the DelayedJobAdmin::QueueThresholdAlertMailer' do
-        DelayedJobAdmin::QueueThresholdAlertMailer.should_receive(:send_alert).with(dummy_alert, emails).and_call_original
+        expect(DelayedJobAdmin::QueueThresholdAlertMailer).to receive(:send_alert).with(dummy_alert, emails).and_call_original
         instance.alert
       end
     end

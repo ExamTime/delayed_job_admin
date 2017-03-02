@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe JobStatus do
   it 'should be defined' do
-    JobStatus.should_not be_nil
+    expect(JobStatus).not_to be_nil
   end
 
   [:job_id, :job_status, :to_json].each do |method|
     it "should respond to the method '#{method}'" do
-      JobStatus.new(99).should respond_to method
+      expect(JobStatus.new(99)).to respond_to method
     end
   end
 
@@ -18,16 +18,16 @@ describe JobStatus do
       end
 
       it 'should successfully create a new instance' do
-        @instance.should_not be_nil
-        @instance.should be_a JobStatus
+        expect(@instance).not_to be_nil
+        expect(@instance).to be_a JobStatus
       end
 
       it 'should set the job_id appropriately' do
-        @instance.job_id.should == 99
+        expect(@instance.job_id).to eq(99)
       end
 
       it 'should set the job_status appropriately' do
-        @instance.job_status.should == Delayed::Job::FAILING
+        expect(@instance.job_status).to eq(Delayed::Job::FAILING)
       end
     end
 
@@ -37,22 +37,22 @@ describe JobStatus do
       end
 
       it 'should successfully create a new instance' do
-        @instance.should_not be_nil
-        @instance.should be_a JobStatus
+        expect(@instance).not_to be_nil
+        expect(@instance).to be_a JobStatus
       end
 
       it 'should set the job_id appropriately' do
-        @instance.job_id.should == 99
+        expect(@instance.job_id).to eq(99)
       end
 
       it 'should set the job_status to a default value of PENDING' do
-        @instance.job_status.should == Delayed::Job::PENDING
+        expect(@instance.job_status).to eq(Delayed::Job::PENDING)
       end
     end
 
     describe 'no parameters supplied' do
       it 'should raise an error' do
-        lambda{ JobStatus.new }.should raise_error ArgumentError
+        expect{ JobStatus.new }.to raise_error ArgumentError
       end
     end
   end
@@ -65,12 +65,12 @@ describe JobStatus do
       end
 
       it 'should return a string' do
-        @job_status.to_json.should be_a String
+        expect(@job_status.to_json).to be_a String
       end
 
       { "job_id" => "\"job_id\":98", "job_status" => "\"job_status\":\"processing\"" }.each do |key,value|
         it "should encode the #{key} model property in the json string" do
-          @job_status.to_json.should include value
+          expect(@job_status.to_json).to include value
         end
       end
 

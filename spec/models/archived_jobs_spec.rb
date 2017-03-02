@@ -37,7 +37,7 @@ describe DelayedJobAdmin::ArchivedJob do
   describe 'an instance' do
     ATTRIBUTE_LIST.each do |attr|
       it "should have an attribute named '#{attr}'" do
-        @archived_job.should respond_to attr
+        expect(@archived_job).to respond_to attr
       end
     end
   end
@@ -46,26 +46,26 @@ describe DelayedJobAdmin::ArchivedJob do
 
     it 'should be invalid if archive_note is not supplied' do
       @archived_job.archive_note = nil
-      @archived_job.should_not be_valid
+      expect(@archived_job).not_to be_valid
     end
 
     it 'should be invalid if archived_at is not supplied' do
       @archived_job.archived_at = nil
-      @archived_job.should_not be_valid
+      expect(@archived_job).not_to be_valid
     end
 
     it 'should set archived_at to the time passed, if supplied' do
       test_time = Time.now - 1.days
       @archived_job.archived_at = test_time
-      @archived_job.should be_valid
-      @archived_job.archived_at.should == test_time
+      expect(@archived_job).to be_valid
+      expect(@archived_job.archived_at).to eq(test_time)
     end
 
     it 'should default archived_at to the datetime mandated by the datetime_generator' do
       @dummy_generator = DummyGenerator.new
       new_instance = DelayedJobAdmin::ArchivedJob.new(@attributes.merge({ datetime_generator: @dummy_generator, archived_at: nil }))
-      new_instance.archived_at.should_not be_nil
-      new_instance.archived_at.should == @dummy_generator.get_datetime
+      expect(new_instance.archived_at).not_to be_nil
+      expect(new_instance.archived_at).to eq(@dummy_generator.get_datetime)
     end
   end
 end
