@@ -7,7 +7,7 @@ describe Delayed::Job do
 
   [:apply_handlers, :status].each do |method|
     it "should respond_to method :#{method}" do
-      @job.should respond_to method
+      expect(@job).to respond_to method
     end
   end
 
@@ -16,15 +16,15 @@ describe Delayed::Job do
       name = "Delayed::Job::#{state.upcase}"
       describe name do
         it 'should be defined' do
-          name.constantize.should_not be_nil
+          expect(name.constantize).not_to be_nil
         end
 
         it 'should be a Delayed::Job::Status' do
-          name.constantize.should be_a Delayed::Job::Status
+          expect(name.constantize).to be_a Delayed::Job::Status
         end
 
         it "should have a string representation of '#{state}'" do
-          name.constantize.to_s.should == state
+          expect(name.constantize.to_s).to eq(state)
         end
       end
     end
@@ -43,14 +43,14 @@ describe Delayed::Job do
 
       it 'should create a destroy handler for each class configured' do
         handler = DummyHandler.new(@job)
-        DummyHandler.should_receive(:new).with(@job).once.and_return(handler)
+        expect(DummyHandler).to receive(:new).with(@job).once.and_return(handler)
         @job.apply_handlers
       end
 
       it 'should invoke the #handle method on each of the created destroy handlers' do
         handler_mock = double('handler_mock')
-        DummyHandler.should_receive(:new).and_return(handler_mock)
-        handler_mock.should_receive(:handle).once
+        expect(DummyHandler).to receive(:new).and_return(handler_mock)
+        expect(handler_mock).to receive(:handle).once
         @job.apply_handlers
       end
     end
@@ -64,23 +64,23 @@ describe Delayed::Job do
 
         it 'should return PENDING if locked_at is nil' do
           @job.locked_at = nil
-          @job.status.should == Delayed::Job::PENDING
+          expect(@job.status).to eq(Delayed::Job::PENDING)
         end
 
         it 'should return PROCESSING if locked_at is not nil' do
           @job.locked_at = DateTime.now - 20.minutes
-          @job.status.should == Delayed::Job::PROCESSING
+          expect(@job.status).to eq(Delayed::Job::PROCESSING)
         end
       end
 
       it 'should return FAILING if last_error is not nil' do
         @job.last_error = 'Failed job'
-        @job.status.should == Delayed::Job::FAILING
+        expect(@job.status).to eq(Delayed::Job::FAILING)
       end
 
       it 'should return FAILED if failed_at is not nil' do
         @job.failed_at = DateTime.now - 20.minutes
-        @job.status.should == Delayed::Job::FAILED
+        expect(@job.status).to eq(Delayed::Job::FAILED)
       end
     end
 

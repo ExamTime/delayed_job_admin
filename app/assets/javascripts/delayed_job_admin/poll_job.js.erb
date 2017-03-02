@@ -1,10 +1,15 @@
 <% environment.context_class.instance_eval { include Rails.application.routes.url_helpers } %>
 var DELAYED_JOB_ADMIN = (function(dja, $) {
 
-  var base_route = '<%= DelayedJobAdmin::job_status_path %>';
-  var default_poll_interval_in_secs = <%= DelayedJobAdmin::default_poll_interval_in_secs %>;
+  var default_poll_interval_in_secs = <%= DelayedJobAdmin::default_poll_interval_in_secs %>,
+      base_route                    = '<%= DelayedJobAdmin::job_status_path %>',
+      polling_jobs                  = {};
 
   dja.poll_job = function(job_id, success, failure, processing, poll_interval) {
+
+    if(Object.keys(polling_jobs).indexOf(""+job_id)!==-1){
+      return false;
+    }
 
     success = (typeof success === 'function') ? success : function() {};
     failure = (typeof failure === 'function') ? failure : function() {};
@@ -21,7 +26,7 @@ var DELAYED_JOB_ADMIN = (function(dja, $) {
         if(data.status==='processing') {
           processing(data);
         }
-        window.setTimeout(poll, poll_interval);
+        polling_jobs[job_id] = window.setTimeout(poll, poll_interval);
       }
     };
 
@@ -35,6 +40,17 @@ var DELAYED_JOB_ADMIN = (function(dja, $) {
     };
 
     poll();
+  };
+
+  dja.stop_polling_job = function(job_id){
+    window.clearTimeout(polling_jobs[job_id]);
+    delete polling_jobs[job_id];
+  };
+
+  dja.stop_polling_all = function(){
+    Object.keys(polling_jobs).forEach(function(key){
+      dja.stop_polling_job(key);
+    });
   };
 
   return dja;

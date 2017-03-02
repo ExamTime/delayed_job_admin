@@ -8,27 +8,27 @@ describe DelayedJobAdmin::ArchiveOnDestroyHandler do
 
   [:handle, :job, :job=, :audit_log, :audit_log=].each do |method|
     it "should respond_to the method :#{method}" do
-      @handler.should respond_to method
+      expect(@handler).to respond_to method
     end
   end
 
   describe 'instantiation' do
     it 'should assign first parameter to the instance variable @job' do
       test = 'This is a test'
-      DelayedJobAdmin::ArchiveOnDestroyHandler.new(test).job.should == test
+      expect(DelayedJobAdmin::ArchiveOnDestroyHandler.new(test).job).to eq(test)
     end
 
     it 'should fail if first parameter is not supplied for @job' do
-      lambda{ DelayedJobAdmin::ArchiveOnDestroyHandler.new }.should raise_error StandardError
+      expect{ DelayedJobAdmin::ArchiveOnDestroyHandler.new }.to raise_error StandardError
     end
 
     it 'should assign the second parameter to @audit_log if supplied' do
       audit_log = 'audit'
-      DelayedJobAdmin::ArchiveOnDestroyHandler.new('job', audit_log).audit_log.should == audit_log
+      expect(DelayedJobAdmin::ArchiveOnDestroyHandler.new('job', audit_log).audit_log).to eq(audit_log)
     end
 
     it 'should default the @audit_log to <blank> if not supplied' do
-      DelayedJobAdmin::ArchiveOnDestroyHandler.new('job').audit_log.should == '<blank>'
+      expect(DelayedJobAdmin::ArchiveOnDestroyHandler.new('job').audit_log).to eq('<blank>')
     end
   end
 
