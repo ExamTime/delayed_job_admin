@@ -26,7 +26,9 @@ var DELAYED_JOB_ADMIN = (function(dja, $) {
         if(data.status==='processing') {
           processing(data);
         }
-        polling_jobs[job_id] = window.setTimeout(poll, poll_interval);
+        if(polling_jobs[job_id]){
+          polling_jobs[job_id] = window.setTimeout(poll, poll_interval);
+        }
       }
     };
 
@@ -39,7 +41,7 @@ var DELAYED_JOB_ADMIN = (function(dja, $) {
       });
     };
 
-    poll();
+    polling_jobs[job_id] = window.setTimeout(poll, poll_interval);
   };
 
   dja.stop_polling_job = function(job_id){
