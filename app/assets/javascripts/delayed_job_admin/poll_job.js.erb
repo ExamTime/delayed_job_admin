@@ -43,30 +43,22 @@ var DELAYED_JOB_ADMIN = (function(dja, $) {
 
     // Loop over each returned job
     for (var i = 0; i < data.length; i++) {
-      job = data[i];
-      returned_job_ids.push('' + job.job_id);
-      polling_job = polling_jobs[job.job_id];
+      job_response = data[i];
+      returned_job_ids.push('' + job_response.job_id);
+      polling_job = polling_jobs[job_response.job_id];
       if (!polling_job) {
         continue;
       }
       // Call events
-      if (job.status==='failing') {
-        polling_job.failure();
-      } else if (job.status==='processing') {
-        polling_job.process();
+      if (job_response.status === 'failing') {
+        polling_job.failure(job_response);
+      } else if (job_response.status === 'processing') {
+        polling_job.process(job_response);
+      } else if (job_response.status === 'none'){
+        dja.stop_polling_job(job_response.job_id);
+        polling_job.success(job_response);
       }
     };
-
-    // Find polling jobs not returned
-    for (var i = 0; i < polling_job_ids.length; i++ ) {
-      polling_job_id = polling_job_ids[i];
-      polling_job = polling_jobs[polling_job_id];
-      if (returned_job_ids.indexOf(polling_job_id) === -1) {
-        // Call success and stop polling
-        dja.stop_polling_job(polling_job_id);
-        polling_job.success();
-      }
-    }
 
     // Continue
     window.setTimeout(poll, poll_interval);
