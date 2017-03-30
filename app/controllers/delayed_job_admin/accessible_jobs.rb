@@ -14,9 +14,14 @@ module DelayedJobAdmin
       job_ids = params.fetch(:job_ids).split(',')
 
       json_response = Delayed::Job.where(id: job_ids).map { |job|
-        json_status = { job_id: job.id, status: 'none' }
+        json_status = { job_id: job.id }
         json_status[:status] = job.status.to_s
         json_status
+      }
+
+      response_ids = json_response.map{|s|s[:job_id].to_s}
+      json_response += (job_ids - response_ids).map { |job_id|
+        { job_id: job_id, status: 'none' }
       }
 
       render json: json_response
