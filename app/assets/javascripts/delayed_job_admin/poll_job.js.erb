@@ -1,59 +1,95 @@
 <% environment.context_class.instance_eval { include Rails.application.routes.url_helpers } %>
 var DELAYED_JOB_ADMIN = (function(dja, $) {
 
-  var default_poll_interval_in_secs = <%= DelayedJobAdmin::default_poll_interval_in_secs %>,
-      base_route                    = '<%= DelayedJobAdmin::job_status_path %>',
+  var base_route                    = '<%= DelayedJobAdmin::statuses_delayed_jobs_path %>',
+      default_poll_interval_in_secs = <%= DelayedJobAdmin::default_poll_interval_in_secs %>,
+      poll_interval                 = default_poll_interval_in_secs * 1000,
       polling_jobs                  = {};
 
-  dja.poll_job = function(job_id, success, failure, processing, poll_interval) {
+  dja.poll_job = function(job_id, success, failure, processing, _poll_interval) {
 
-    if(Object.keys(polling_jobs).indexOf(""+job_id)!==-1){
+    if (Object.keys(polling_jobs).indexOf(""+job_id)!==-1) {
       return false;
     }
 
     success = (typeof success === 'function') ? success : function() {};
     failure = (typeof failure === 'function') ? failure : function() {};
     process = (typeof process === 'function') ? process : function() {};
-    poll_interval = (typeof poll_interval !== 'undefined') ? poll_interval*1000 : default_poll_interval_in_secs*1000;
-    var status_route = base_route.replace(/:id/, job_id);
 
-    var on_status_update = function(data) {
-      if(data.status==='none') {
-        success(data);
-      } else if(data.status==='failing') {
-        failure(data);
-      } else {
-        if(data.status==='processing') {
-          processing(data);
-        }
-        if(polling_jobs[job_id]){
-          polling_jobs[job_id] = window.setTimeout(poll, poll_interval);
-        }
-      }
+    poll_interval = (typeof _poll_interval !== 'undefined') ? _poll_interval*1000 : default_poll_interval_in_secs*1000;
+
+    polling_jobs[job_id] = {
+      success: success,
+      failure: failure,
+      process: process
     };
 
-    var poll = function() {
-      $.ajax({
-        url: status_route,
-        data: {},
-        success: on_status_update,
-        dataType: 'json'
-      });
-    };
-
-    polling_jobs[job_id] = window.setTimeout(poll, poll_interval);
   };
 
-  dja.stop_polling_job = function(job_id){
-    window.clearTimeout(polling_jobs[job_id]);
+  dja.stop_polling_job = function(job_id) {
     delete polling_jobs[job_id];
   };
 
   dja.stop_polling_all = function(){
-    Object.keys(polling_jobs).forEach(function(key){
+    Object.keys(polling_jobs).forEach(function(key) {
       dja.stop_polling_job(key);
     });
   };
+
+  var on_statuses_update = function(data) {
+    var returned_job_ids = [];
+    var polling_job_ids = Object.keys(polling_jobs);
+    var polling_job;
+
+    // Loop over each returned job
+    for (var i = 0; i < data.length; i++) {
+      job = data[i];
+      returned_job_ids.push('' + job.job_id);
+      polling_job = polling_jobs[job.job_id];
+      if (!polling_job) {
+        continue;
+      }
+      // Call events
+      if (job.status==='failing') {
+        polling_job.failure();
+      } else if (job.status==='processing') {
+        polling_job.process();
+      }
+    };
+
+    // Find polling jobs not returned
+    for (var i = 0; i < polling_job_ids.length; i++ ) {
+      polling_job_id = polling_job_ids[i];
+      polling_job = polling_jobs[polling_job_id];
+      if (returned_job_ids.indexOf(polling_job_id) === -1) {
+        // Call success and stop polling
+        dja.stop_polling_job(polling_job_id);
+        polling_job.success();
+      }
+    }
+
+    // Continue
+    window.setTimeout(poll, poll_interval);
+  };
+
+  var poll = function() {
+    // Check statuses only if we still have jobs to poll
+    var job_ids = Object.keys(polling_jobs);
+    if (job_ids.length > 0) {
+      var statuses_route = base_route.replace(/:job_ids/, job_ids.join(','));
+      $.ajax({
+        url: statuses_route,
+        data: {},
+        success: on_statuses_update,
+        dataType: 'json'
+      });
+    } else {
+      // Continue
+      window.setTimeout(poll, poll_interval)
+    }
+  };
+
+  poll();
 
   return dja;
 

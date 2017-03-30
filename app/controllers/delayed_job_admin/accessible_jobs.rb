@@ -10,12 +10,14 @@ module DelayedJobAdmin
       render 'delayed_job_admin/shared/index'
     end
 
-    def job_status
-      job_id = params.fetch(:id).to_i
-      json_response = { job_id: job_id, status: 'none' }
+    def job_statuses
+      job_ids = params.fetch(:job_ids).split(',')
 
-      job = Delayed::Job.where(id: job_id).first
-      json_response[:status] = job.status.to_s if job
+      json_response = Delayed::Job.where(id: job_ids).map { |job|
+        json_status = { job_id: job.id, status: 'none' }
+        json_status[:status] = job.status.to_s
+        json_status
+      }
 
       render json: json_response
     end

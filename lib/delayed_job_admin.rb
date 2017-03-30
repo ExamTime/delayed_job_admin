@@ -10,7 +10,7 @@ module DelayedJobAdmin
                  :alert_strategies,
                  :job_resource_name,
                  :archived_job_resource_name,
-                 :job_status_path,
+                 :statuses_delayed_jobs_path,
                  :pagination_excluding_queues,
                  :pagination_jobs_per_page
 
@@ -20,7 +20,7 @@ module DelayedJobAdmin
   @@alert_strategies = nil
   @@job_resource_name = nil
   @@archived_job_resource_name = nil
-  @@job_status_path = nil
+  @@statuses_delayed_jobs_path = nil
   @@pagination_excluding_queues = []
   @@pagination_jobs_per_page = nil
 
