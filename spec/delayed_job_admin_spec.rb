@@ -5,10 +5,10 @@ describe DelayedJobAdmin do
     expect(DelayedJobAdmin).to be_a Module
   end
 
-  [ :destroy_handlers, :destroy_handlers=, :monitoring_strategies, :monitoring_strategies=,
+  [ :destroy_handlers, :destroy_handlers=, :monitoring_strategies, :monitoring_strategies=, 
     :alert_strategies, :alert_strategies=, :check_queues, :job_resource_name, :job_resource_name=,
-    :archived_job_resource_name, :archived_job_resource_name=, :statuses_delayed_jobs_path,
-    :statuses_delayed_jobs_path=, :pagination_jobs_per_page, :pagination_jobs_per_page= ].each do |method|
+    :archived_job_resource_name, :archived_job_resource_name=, :job_status_path,
+    :job_status_path=, :pagination_jobs_per_page, :pagination_jobs_per_page= ].each do |method|
     it "should expose the method '#{method}'" do
       expect(DelayedJobAdmin).to respond_to method
     end
@@ -45,13 +45,13 @@ describe DelayedJobAdmin do
       end
     end
 
-    describe "statuses_delayed_jobs_path" do
+    describe "job_status_path" do
       it "should be defined" do
-        expect(DelayedJobAdmin.statuses_delayed_jobs_path).not_to be_nil
+        expect(DelayedJobAdmin.job_status_path).not_to be_nil
       end
 
-      it "should have a default value of '/delayed_jobs/:job_ids/statuses'" do
-        expect(DelayedJobAdmin.statuses_delayed_jobs_path).to eq('/delayed_jobs/:job_ids/statuses')
+      it "should have a default value of '/jobs/:id/job_status'" do
+        expect(DelayedJobAdmin.job_status_path).to eq('/jobs/:id/job_status')
       end
     end
 

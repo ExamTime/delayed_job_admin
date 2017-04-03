@@ -1,7 +1,10 @@
 DelayedJobAdmin::Engine.routes.draw do
   resources :jobs, only: [ :index, :destroy ] do
+    member do
+      get :job_status
+    end
     collection do
-      get '/:job_ids/statuses' => 'DelayedJobAdmin::Jobs#job_statuses', as: :statuses_delayed_jobs_path
+      get '/:job_ids/statuses' => 'DelayedJobAdmin::Jobs#job_statuses', as: :job_statuses
     end
   end
 

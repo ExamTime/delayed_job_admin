@@ -2,7 +2,7 @@ DelayedJobAdmin.setup do |config|
   ##########################################################################################################
   #  JOB DELETION - delete_handlers
   ##########################################################################################################
-  # Configure an array of delete_handlers that will be called when the
+  # Configure an array of delete_handlers that will be called when the 
   # JobsController#delete action is invoked.
   # Each class in the list will be instantiated with a single argument,
   # representing the delayed_job of interest, i.e.
@@ -48,7 +48,7 @@ DelayedJobAdmin.setup do |config|
   #### QueueThresholdChecker
   #
   # This default monitoring strategy is quite simplistic, it just counts the total number of jobs in the
-  # named queue. It should be configured with a hash to define the acceptable thresholds for different named
+  # named queue. It should be configured with a hash to define the acceptable thresholds for different named 
   # queues.
   #
   # The config must define a hash representation of the the threshold levels that should be monitored on
@@ -95,7 +95,7 @@ DelayedJobAdmin.setup do |config|
   # Set the default interval between poll requests
   config.default_poll_interval_in_secs = 5
   # Set the URL for retrieval of a job status
-  config.statuses_delayed_jobs_path = '/delayed_jobs/:job_ids/statuses'
+  config.job_status_path = '/jobs/:id/job_status'
 
   ##########################################################################################################
   #  CONFIGURABLE ROUTES
