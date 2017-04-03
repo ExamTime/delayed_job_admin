@@ -11,6 +11,7 @@ module DelayedJobAdmin
                  :job_resource_name,
                  :archived_job_resource_name,
                  :job_status_path,
+                 :job_statuses_path,
                  :pagination_excluding_queues,
                  :pagination_jobs_per_page
 
@@ -21,6 +22,7 @@ module DelayedJobAdmin
   @@job_resource_name = nil
   @@archived_job_resource_name = nil
   @@job_status_path = nil
+  @@job_statuses_path = nil
   @@pagination_excluding_queues = []
   @@pagination_jobs_per_page = nil
 

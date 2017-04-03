@@ -1,7 +1,7 @@
 <% environment.context_class.instance_eval { include Rails.application.routes.url_helpers } %>
 var DELAYED_JOB_ADMIN = (function(dja, $) {
 
-  var base_route                    = '<%= DelayedJobAdmin::statuses_delayed_jobs_path %>',
+  var base_route                    = '<%= DelayedJobAdmin::job_statuses_path %>',
       default_poll_interval_in_secs = <%= DelayedJobAdmin::default_poll_interval_in_secs %>,
       poll_interval                 = default_poll_interval_in_secs * 1000,
       polling_jobs                  = {};
