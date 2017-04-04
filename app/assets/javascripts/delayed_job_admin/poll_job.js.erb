@@ -51,6 +51,7 @@ var DELAYED_JOB_ADMIN = (function(dja, $) {
       }
       // Call events
       if (job_response.status === 'failing') {
+        dja.stop_polling_job(job_response.job_id);
         polling_job.failure(job_response);
       } else if (job_response.status === 'processing') {
         polling_job.process(job_response);
