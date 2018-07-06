@@ -1,25 +1,25 @@
 require 'spec_helper'
 
-describe JobStatus do
+describe DelayedJobAdmin::JobStatus do
   it 'should be defined' do
-    expect(JobStatus).not_to be_nil
+    expect(DelayedJobAdmin::JobStatus).not_to be_nil
   end
 
   [:job_id, :job_status, :to_json].each do |method|
     it "should respond to the method '#{method}'" do
-      expect(JobStatus.new(99)).to respond_to method
+      expect(DelayedJobAdmin::JobStatus.new(99)).to respond_to method
     end
   end
 
   describe 'instantiation' do
     describe 'two parameters supplied' do
       before :each do
-        @instance = JobStatus.new(99, Delayed::Job::FAILING)
+        @instance = DelayedJobAdmin::JobStatus.new(99, Delayed::Job::FAILING)
       end
 
       it 'should successfully create a new instance' do
         expect(@instance).not_to be_nil
-        expect(@instance).to be_a JobStatus
+        expect(@instance).to be_a DelayedJobAdmin::JobStatus
       end
 
       it 'should set the job_id appropriately' do
@@ -33,12 +33,12 @@ describe JobStatus do
 
     describe 'single parameter supplied' do
       before :each do
-        @instance = JobStatus.new(99)
+        @instance = DelayedJobAdmin::JobStatus.new(99)
       end
 
       it 'should successfully create a new instance' do
         expect(@instance).not_to be_nil
-        expect(@instance).to be_a JobStatus
+        expect(@instance).to be_a DelayedJobAdmin::JobStatus
       end
 
       it 'should set the job_id appropriately' do
@@ -52,7 +52,7 @@ describe JobStatus do
 
     describe 'no parameters supplied' do
       it 'should raise an error' do
-        expect{ JobStatus.new }.to raise_error ArgumentError
+        expect{ DelayedJobAdmin::JobStatus.new }.to raise_error ArgumentError
       end
     end
   end
@@ -61,7 +61,7 @@ describe JobStatus do
 
     describe '#to_json' do
       before :each do
-        @job_status = JobStatus.new(98, Delayed::Job::PROCESSING)
+        @job_status = DelayedJobAdmin::JobStatus.new(98, Delayed::Job::PROCESSING)
       end
 
       it 'should return a string' do
