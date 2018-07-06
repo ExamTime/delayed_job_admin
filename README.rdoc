@@ -82,17 +82,6 @@ The install script will create three new files in your application:
 
   The idea would be that this task could be run via a cron job.
 
-=== Update Notes
-
-== Version 0.0.3
-The admin jobs page is too busy with a swarm of jobs that we are not very interested in (i.e. crawl jobs).
-These jobs are queued in batch and have the effect of transiently flooding the queue and making the admin
-page impossible to use.
-
-The small change in this version allows one to specify a config setting `pagination_excluding_queues`.
-This setting takes an array of strings, representing selected queue names used in your system (defaults to empty array).
-This will filter out the jobs from the specified queues when populating the jobs and archived jobs index pages.
-
 === Getting started with development (i.e. running tests)
 
   1. Clone the repo from GitHub git@github.com:ExamTime/ninja_access.git
