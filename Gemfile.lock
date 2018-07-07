@@ -7,7 +7,7 @@ PATH
       jquery-rails
       kaminari
       protected_attributes
-      rails (~> 4.0)
+      rails (>= 3.2.14)
 
 GEM
   remote: http://rubygems.org/
