@@ -1,7 +1,5 @@
 module DelayedJobAdmin
   class ArchivedJob < ActiveRecord::Base
-    attr_accessible :job, :archived_at, :archive_note, :datetime_generator
-
     validates :archived_at, presence: true
     validates :archive_note, presence: true
 

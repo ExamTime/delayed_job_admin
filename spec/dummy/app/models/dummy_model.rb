@@ -1,5 +1,4 @@
 class DummyModel < ActiveRecord::Base
-  attr_accessible :name, :delay_in_seconds
   after_initialize :default_delay_in_seconds
 
   def method_to_queue(input)
