@@ -1,8 +1,12 @@
 require 'spec_helper'
 
-describe DelayedJobAdmin::ArchivedJobsController do
+describe DelayedJobAdmin::ArchivedJobsController, type: :controller do
   before :all do
     DelayedJobAdmin::ArchivedJob.delete_all
+  end
+
+  before :each do
+    @routes = DelayedJobAdmin::Engine.routes
   end
 
   it "should be defined" do
@@ -35,13 +39,13 @@ describe DelayedJobAdmin::ArchivedJobsController do
       end
 
       it "should render the :index template" do
-        get :index, use_route: :delayed_job_admin
+        get :index
         expect(response).to render_template :index
       end
 
       it "should assign a list of all jobs currently archived" do
         unarchived_job = DummyModel.create(name: 'Model not in queue').delay.method_to_queue('not in queue')
-        get :index, use_route: :delayed_job_admin
+        get :index
         archived_jobs = assigns(:jobs)
         archived_ids = archived_jobs.map(&:id)
         expect(archived_ids).to include @job.id
@@ -49,21 +53,21 @@ describe DelayedJobAdmin::ArchivedJobsController do
       end
 
       it "should list archived jobs not assigned to any specific queue" do
-        get :index, use_route: :delayed_job_admin
+        get :index
         archived_jobs = assigns(:jobs)
         archived_ids = archived_jobs.map(&:id)
         expect(archived_ids).to include @job.id
       end
 
       it "should list jobs in non-blacklisted queues" do
-        get :index, use_route: :delayed_job_admin
+        get :index
         archived_jobs = assigns(:jobs)
         archived_ids = archived_jobs.map(&:id)
         expect(archived_ids).to include @job_queue_a.id
       end
 
       it "should not list jobs in blacklisted queues" do
-        get :index, use_route: :delayed_job_admin
+        get :index
         archived_jobs = assigns(:jobs)
         archived_ids = archived_jobs.map(&:id)
         expect(archived_ids).not_to include @job_queue_b.id

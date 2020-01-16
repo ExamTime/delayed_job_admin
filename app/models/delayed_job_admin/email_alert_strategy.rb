@@ -10,7 +10,7 @@ module DelayedJobAdmin
     end
 
     def alert
-      DelayedJobAdmin::QueueThresholdAlertMailer.send_alert(queue_alert, emails).deliver
+      DelayedJobAdmin::QueueThresholdAlertMailer.send_alert(queue_alert, emails).deliver_now
     end
   end
 end

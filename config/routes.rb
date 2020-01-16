@@ -4,7 +4,7 @@ DelayedJobAdmin::Engine.routes.draw do
       get :job_status
     end
     collection do
-      get '/:job_ids/statuses', to: 'delayed_job_admin/jobs#job_statuses', as: :job_statuses
+      get '/:job_ids/statuses', to: 'jobs#job_statuses', as: :job_statuses
     end
   end
 

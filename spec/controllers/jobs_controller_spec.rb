@@ -1,8 +1,12 @@
 require 'spec_helper'
 
-describe DelayedJobAdmin::JobsController do
+describe DelayedJobAdmin::JobsController, type: :controller do
   before :all do
     Delayed::Job.delete_all
+  end
+
+  before :each do
+    @routes = DelayedJobAdmin::Engine.routes
   end
 
   it "should be defined" do
@@ -33,14 +37,14 @@ describe DelayedJobAdmin::JobsController do
       end
 
       it "should render the :index template" do
-        get :index, use_route: :delayed_job_admin
+        get :index
         expect(response).to render_template :index
       end
 
       it "should assign a list of all jobs currently in the queue" do
         unqueued_model = DummyModel.create(name: 'Model not in queue')
         unqueued_model.method_to_queue('not in queue')
-        get :index, use_route: :delayed_job_admin
+        get :index
         queued_jobs = assigns(:jobs)
         queued_models = queued_jobs.map(&:payload_object).map(&:object)
         expect(queued_models).to include @queued_model
@@ -48,19 +52,19 @@ describe DelayedJobAdmin::JobsController do
       end
 
       it "should list jobs not assigned to any specific queue" do
-        get :index, use_route: :delayed_job_admin
+        get :index
         queued_jobs = assigns(:jobs)
         expect(queued_jobs).to include @job
       end
 
       it "should list jobs in non-blacklisted queues" do
-        get :index, use_route: :delayed_job_admin
+        get :index
         queued_jobs = assigns(:jobs)
         expect(queued_jobs).to include @job_queue_a
       end
 
       it "should not list jobs in blacklisted queues" do
-        get :index, use_route: :delayed_job_admin
+        get :index
         queued_jobs = assigns(:jobs)
         expect(queued_jobs).not_to include @job_queue_b
       end
@@ -80,17 +84,17 @@ describe DelayedJobAdmin::JobsController do
         mock_handler = double('mock_handler')
         expect(DummyHandler).to receive(:new).with(@job).once.and_return(mock_handler)
         expect(mock_handler).to receive(:handle).once
-        delete :destroy, id: @job, use_route: :delayed_job_admin
+        delete :destroy, id: @job
       end
 
       context 'handlers process successfully' do
         it "should set a :notice flash message on delete" do
-          delete :destroy, id: @job, use_route: :delayed_job_admin
+          delete :destroy, id: @job
           expect(flash[:notice]).to eq(I18n.t('delayed_job_admin.destroy_job.success'))
         end
 
         it "should redirect to the DelayedJobAdmin::JobsController#index action" do
-          delete :destroy, id: @job, use_route: :delayed_job_admin
+          delete :destroy, id: @job
           expect(response).to redirect_to jobs_path
         end
       end
@@ -101,12 +105,12 @@ describe DelayedJobAdmin::JobsController do
         end
 
         it "should set an :error flash message" do
-          delete :destroy, id: @job, use_route: :delayed_job_admin
+          delete :destroy, id: @job
           expect(flash[:error]).to eq(I18n.t('delayed_job_admin.destroy_job.failure'))
         end
 
         it "should redirect to the DelayedJobAdmin::JobsController#index action" do
-          delete :destroy, id: @job, use_route: :delayed_job_admin
+          delete :destroy, id: @job
           expect(response).to redirect_to jobs_path
         end
       end
@@ -116,7 +120,7 @@ describe DelayedJobAdmin::JobsController do
       describe "when job is in the queue" do
         describe "and the job has not yet been processed" do
           it "should return json indicating job is pending" do
-            get :job_status, id: @job.id, use_route: :delayed_job_admin
+            get :job_status, id: @job.id
             expect(JSON.parse(response.body)['status']).to eq('pending')
           end
         end
@@ -129,7 +133,7 @@ describe DelayedJobAdmin::JobsController do
             end
 
             it "should return json indicating the job is failing" do
-              get :job_status, id: @job.id, use_route: :delayed_job_admin
+              get :job_status, id: @job.id
               expect(JSON.parse(response.body)['status']).to eq('failing')
             end
           end
@@ -140,7 +144,7 @@ describe DelayedJobAdmin::JobsController do
             end
 
             it "should return json indicating the job has failed" do
-              get :job_status, id: @job.id, use_route: :delayed_job_admin
+              get :job_status, id: @job.id
               expect(JSON.parse(response.body)['status']).to eq('failed')
             end
           end
@@ -149,7 +153,7 @@ describe DelayedJobAdmin::JobsController do
 
       describe "when job is not in the queue" do
         it "should return json indicating the job could not be found" do
-          get :job_status, id: 99, use_route: :delayed_job_admin
+          get :job_status, id: 99
           expect(JSON.parse(response.body)['status']).to eq('none')
         end
       end
@@ -160,7 +164,7 @@ describe DelayedJobAdmin::JobsController do
       describe "when job is in the queue" do
         describe "and the job has not yet been processed" do
           it "should return json indicating job is pending" do
-            get :job_statuses, job_ids: @job.id, use_route: :delayed_job_admin
+            get :job_statuses, job_ids: @job.id
             expect(JSON.parse(response.body).first['status']).to eq('pending')
           end
         end
@@ -173,7 +177,7 @@ describe DelayedJobAdmin::JobsController do
             end
 
             it "should return json indicating the job is failing" do
-              get :job_statuses, job_ids: @job.id, use_route: :delayed_job_admin
+              get :job_statuses, job_ids: @job.id
               expect(JSON.parse(response.body).first['status']).to eq('failing')
             end
           end
@@ -184,7 +188,7 @@ describe DelayedJobAdmin::JobsController do
             end
 
             it "should return json indicating the job has failed" do
-              get :job_statuses, job_ids: @job.id, use_route: :delayed_job_admin
+              get :job_statuses, job_ids: @job.id
               expect(JSON.parse(response.body).first['status']).to eq('failed')
             end
           end
@@ -193,7 +197,7 @@ describe DelayedJobAdmin::JobsController do
 
       describe "when job is not in the queue" do
         it "should return json indicating the job could not be found" do
-          get :job_statuses, job_ids: 99, use_route: :delayed_job_admin
+          get :job_statuses, job_ids: 99
           expect(JSON.parse(response.body).first['status']).to eq('none')
         end
       end

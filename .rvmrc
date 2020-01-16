@@ -4,7 +4,7 @@ if [ "${RAILS_ENV}" != "" ]; then
     echo "WARNING: RAILS_ENV was set to '${RAILS_ENV}'. Unsetting..."
     export RAILS_ENV=""
 fi
-rvm --create use 2.2.3@delayed_job_admin
+rvm --create use 2.5.7@delayed_job_admin
 hash -r
 which bundle > /dev/null
 if [ $? -ne 0 ]; then

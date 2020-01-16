@@ -89,4 +89,5 @@ The install script will create three new files in your application:
   3. bundle install --binstubs
   4. cd spec/dummy
   5. bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rake db:test:prepare
-  6. bundle exec rake
+  6. cd ../../
+  7. bundle exec rake
