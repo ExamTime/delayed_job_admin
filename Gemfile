@@ -5,10 +5,11 @@ source "http://rubygems.org"
 # development dependencies will be added by default to the :development group.
 gemspec
 
-gem 'protected_attributes'
+gem 'protected_attributes_continued'
 
 group :development, :test do
   gem 'pry-byebug'
+  gem 'rails-controller-testing'
 end
 
 # Declare any dependencies that are still in development here instead of in
